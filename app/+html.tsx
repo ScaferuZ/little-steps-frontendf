@@ -20,7 +20,10 @@ export default function Root({ children }: PropsWithChildren) {
         />
         <meta name="author" content="The Dev Environment, Inc." />
         <meta name="publisher" content="The Dev Environment, Inc." />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://yourdomain.com" />
         <meta property="og:title" content="Expo Router Typescript" />
@@ -29,7 +32,10 @@ export default function Root({ children }: PropsWithChildren) {
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://yourdomain.com" />
         <meta property="twitter:title" content="Expo Router Typescript" />
-        <meta property="twitter:description" content="An expo app built using Expo Router Typescript" />
+        <meta
+          property="twitter:description"
+          content="An expo app built using Expo Router Typescript"
+        />
         <meta property="twitter:image" content="https://yourdomain.com/og-image.jpg" />
       </head>
       <body>{children}</body>

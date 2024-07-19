@@ -12,7 +12,7 @@ export default function SecondScreen() {
         <S.Title testID="second-screen-title">🥈</S.Title>
         <S.Text testID="second-screen-text">Go to app/second/index.tsx to edit</S.Text>
 
-        <LinkButton href="/" text="Go To Home Screen" />
+        {/* <LinkButton href="/" text="Go To Home Screen" /> */}
       </S.Content>
     </ScreenLayout>
   )

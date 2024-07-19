@@ -3,8 +3,10 @@ import { Stack } from 'expo-router'
 import LinkButton from 'src/components/LinkButton'
 import ScreenLayout from 'src/components/ScreenLayout'
 import Button from 'src/components/Button'
+import { useSession } from 'app/ctx'
 
 export default function HomeScreen() {
+  const { signOut, session } = useSession()
   return (
     <ScreenLayout testID="home-screen-layout">
       <S.Content testID="home-screen-content">
@@ -13,7 +15,13 @@ export default function HomeScreen() {
         <S.Title testID="home-screen-title">🏠</S.Title>
         <S.Text testID="home-screen-text">Go to app/index.tsx to edit</S.Text>
 
-        <LinkButton href="/second" text="Go To Second Screen" />
+        <Button
+          variant="outline"
+          onPress={() => {
+            signOut()
+          }}>
+          Sign Out
+        </Button>
       </S.Content>
     </ScreenLayout>
   )
