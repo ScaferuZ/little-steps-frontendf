@@ -45,19 +45,20 @@ function RootAppLayout() {
   return (
     <ThemeProvider theme={appTheme as DefaultTheme}>
       <StatusBar style="light" />
-      <S.AppWrapper>
-        <SessionProvider>
-          <NavProvider value={navTheme}>
-            <Slot screenOptions={{ headerShown: false }} />
-          </NavProvider>
-        </SessionProvider>
-      </S.AppWrapper>
+      {/* <S.AppWrapper> */}
+      <SessionProvider>
+        <NavProvider value={navTheme}>
+          <Slot screenOptions={{ headerShown: false }} />
+        </NavProvider>
+      </SessionProvider>
+      {/* </S.AppWrapper> */}
     </ThemeProvider>
   )
 }
 
 const S = {
   AppWrapper: styled.SafeAreaView`
+    padding: 0;
     flex: 1;
     flex-direction: column;
     background-color: ${appTheme.background};

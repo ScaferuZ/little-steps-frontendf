@@ -21,18 +21,15 @@ export default function Login() {
   return (
     <ScreenLayout>
       <S.Content>
-        <S.Title>Selamat Datang 👋🏻</S.Title>
-        <S.Text>Masuk dengan akun yang telah terdaftar!</S.Text>
+        <S.Title>Daftarkan Diri,</S.Title>
+        <S.Text>Daftarkan akunmu sekarang!</S.Text>
         <View style={styles.separator} />
+        <Input className="mb-6" label="Nama" />
         <Input className="mb-6" label="Email" />
-        <Input label="Kata Sandi" secureTextEntry={true} />
-        <LinkButton
-          className="text-xs mt-3 text-right w-full"
-          href="/register"
-          text="Lupa Kata Sandi?"
-        />
+        <Input className="mb-6" label="Kata Sandi" secureTextEntry={true} />
+        <Input label="Konfirmasi Kata Sandi" secureTextEntry={true} />
         <Button className="w-full mt-11 p-4" variant="primary" onPress={handleLogin}>
-          Masuk
+          Daftar
         </Button>
         <View className="flex flex-row items-center mt-16">
           <View className="flex-1 h-[1px] bg-grey" />
@@ -48,11 +45,11 @@ export default function Login() {
           </View>
         </Button>
         <View className="flex flex-row w-full justify-center items-center mt-11">
-          <Text className="text-center text-sm text-grey">Belum memiliki akun? </Text>
+          <Text className="text-center text-sm text-grey">Sudah memiliki akun? </Text>
           <LinkButton
-            href="/signup"
+            href="/login"
             className="text-center text-sm font-bold text-primary ml-1"
-            text="Daftar"
+            text="Masuk"
           />
         </View>
       </S.Content>

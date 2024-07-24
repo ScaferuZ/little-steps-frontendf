@@ -3,11 +3,11 @@ import { Stack } from 'expo-router'
 import LinkButton from 'src/components/LinkButton'
 import ScreenLayout from 'src/components/ScreenLayout'
 
-export default function SecondScreen() {
+export default function Profile() {
   return (
     <ScreenLayout testID="second-screen-layout">
       <S.Content testID="second-screen-content">
-        <Stack.Screen options={{ title: 'Second Screen' }} />
+        <Stack.Screen options={{ title: 'Profile' }} />
 
         <S.Title testID="second-screen-title">🥈</S.Title>
         <S.Text testID="second-screen-text">Go to app/second/index.tsx to edit</S.Text>

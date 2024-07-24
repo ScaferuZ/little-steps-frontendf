@@ -2,26 +2,17 @@ import styled from 'styled-components/native'
 import { Stack } from 'expo-router'
 import LinkButton from 'src/components/LinkButton'
 import ScreenLayout from 'src/components/ScreenLayout'
-import Button from 'src/components/Button'
-import { useSession } from 'app/ctx'
 
-export default function Beranda() {
-  const { signOut, session } = useSession()
+export default function WiseGuard() {
   return (
-    <ScreenLayout testID="home-screen-layout">
-      <S.Content testID="home-screen-content">
-        <Stack.Screen options={{ title: 'Beranda' }} />
+    <ScreenLayout testID="second-screen-layout">
+      <S.Content testID="second-screen-content">
+        <Stack.Screen options={{ title: 'WiseGuard' }} />
 
-        <S.Title testID="home-screen-title">🏠</S.Title>
-        <S.Text testID="home-screen-text">Go to app/index.tsx to edit</S.Text>
+        <S.Title testID="second-screen-title">🥈</S.Title>
+        <S.Text testID="second-screen-text">Go to app/second/index.tsx to edit</S.Text>
 
-        <Button
-          variant="outline"
-          onPress={() => {
-            signOut()
-          }}>
-          Sign Out
-        </Button>
+        {/* <LinkButton href="/" text="Go To Home Screen" /> */}
       </S.Content>
     </ScreenLayout>
   )
@@ -43,7 +34,7 @@ const S = {
   Text: styled.Text`
     color: ${(p) => p.theme.black};
     font-family: helvetica;
-    font-weight: 700;
+    font-weight: 600;
     font-size: ${(p) => p.theme.size(15, 'px')};
     margin-bottom: ${(p) => p.theme.size(15, 'px')};
   `
