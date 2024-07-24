@@ -10,6 +10,8 @@ import useCacheAssets from 'src/hooks/useCacheAssets'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 
+import './global.css'
+
 export { ErrorBoundary } from 'expo-router'
 
 export const unstable_settings = {

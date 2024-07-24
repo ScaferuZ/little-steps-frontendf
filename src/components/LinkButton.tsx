@@ -5,15 +5,18 @@ import { openURL } from 'expo-linking'
 interface Props {
   href: string
   text: string
+  className?: string
 }
 
-export default function LinkButton({ href, text }: Props) {
+export default function LinkButton({ href, text, className }: Props) {
   return href.substring(0, 1) === '/' ? (
-    <S.InternalLink testID="link-button" href={href}>
-      <S.LinkText testID="link-button-text">{text}</S.LinkText>
+    <S.InternalLink className={`${className}`} testID="link-button" href={href}>
+      <S.LinkText className="text-primary " testID="link-button-text">
+        {text}
+      </S.LinkText>
     </S.InternalLink>
   ) : (
-    <S.ExternalLink testID="link-button" onPress={() => openURL(href)}>
+    <S.ExternalLink className={`${className}`} testID="link-button" onPress={() => openURL(href)}>
       <S.LinkText testID="link-button-text">{text}</S.LinkText>
     </S.ExternalLink>
   )
@@ -21,21 +24,16 @@ export default function LinkButton({ href, text }: Props) {
 
 const S = {
   ExternalLink: styled.TouchableOpacity`
-    padding: ${(p) => p.theme.size(10, 'px')} ${(p) => p.theme.size(20, 'px')};
     border-color: ${(p) => p.theme.primary};
-    border-width: ${(p) => p.theme.size(1, 'px')};
+    border-width: ${(p) => p.theme.size(0, 'px')};
     border-radius: ${(p) => p.theme.size(5, 'px')};
     background-color: transparent;
   `,
   InternalLink: styled(Link)`
-    padding: ${(p) => p.theme.size(10, 'px')} ${(p) => p.theme.size(20, 'px')};
     border-color: ${(p) => p.theme.primary};
-    border-width: ${(p) => p.theme.size(1, 'px')};
+    border-width: ${(p) => p.theme.size(0, 'px')};
     border-radius: ${(p) => p.theme.size(5, 'px')};
     background-color: transparent;
   `,
-  LinkText: styled.Text`
-    color: ${(p) => p.theme.primary};
-    font-weight: 600;
-  `
+  LinkText: styled.Text``
 }

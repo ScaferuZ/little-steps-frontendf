@@ -4,6 +4,7 @@ import { TouchableOpacityProps } from 'react-native'
 
 interface ThemeProps {
   primary: string
+  grey: string
 }
 
 const variants = {
@@ -42,6 +43,15 @@ const variants = {
     text: {
       color: '#fff'
     }
+  }),
+  google: (theme: ThemeProps) => ({
+    button: {
+      backgroundColor: '#FAFAFF',
+      borderColor: 'transparent'
+    },
+    text: {
+      color: theme.grey
+    }
   })
 }
 
@@ -57,7 +67,7 @@ const Button = forwardRef<TouchableOpacityProps, ButtonProps>(
     const variantStyles = variants[variant](theme)
 
     return (
-      <S.Button ref={ref} style={variantStyles.button} {...props}>
+      <S.Button className={`${className}`} ref={ref} style={variantStyles.button} {...props}>
         <S.ButtonText style={variantStyles.text}>{children}</S.ButtonText>
       </S.Button>
     )
@@ -70,7 +80,6 @@ export default Button
 
 const S = {
   Button: styled.TouchableOpacity`
-    padding: ${(p) => p.theme.size(10, 'px')} ${(p) => p.theme.size(20, 'px')};
     border-radius: ${(p) => p.theme.size(10, 'px')};
     align-items: center;
     justify-content: center;
