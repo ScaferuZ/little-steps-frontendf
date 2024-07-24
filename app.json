@@ -7,12 +7,11 @@
     "orientation": "portrait",
     "icon": "./src/assets/images/app-icon.png",
     "splash": {
-      "image": "./src/assets/images/splash.png",
+      "image": "./src/assets/images/logo-splash.png",
+      "resizeMode": "contain",
       "backgroundColor": "#222"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false
     },
@@ -27,10 +26,7 @@
       "favicon": "./src/assets/images/app-icon.png",
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-router",
-      "expo-secure-store"
-    ],
+    "plugins": ["expo-router", "expo-secure-store"],
     "extra": {
       "router": {
         "origin": false
