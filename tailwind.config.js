@@ -10,6 +10,8 @@ module.exports = {
   theme: {
     colors: {
       background: '#FAFAFA',
+      lightPink: '#FFEAF1',
+      accent: '#2C3968',
       black: '#121212',
       primary: '#E6407B',
       secondary: '#CCC',
