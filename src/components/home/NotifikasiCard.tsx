@@ -2,6 +2,8 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons'
 
+import '../../../app/global.css'
+
 const NotifikasiCard = () => {
   return (
     <View className="flex flex-row justify-between items-center bg-white w-full px-2 py-3 mb-4">

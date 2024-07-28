@@ -13,11 +13,13 @@ module.exports = {
       lightPink: '#FFEAF1',
       accent: '#2C3968',
       black: '#121212',
+      secondaryBlack: '#292D32',
       white: '#FFFFFF',
       primary: '#E6407B',
       secondary: '#CCC',
       highlight: '#FF2353',
-      grey: '#605B57'
+      grey: '#605B57',
+      lightGrey: '#B1B5C7'
     },
     extend: {}
   },
