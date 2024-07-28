@@ -13,6 +13,7 @@ module.exports = {
       lightPink: '#FFEAF1',
       accent: '#2C3968',
       black: '#121212',
+      white: '#FFFFFF',
       primary: '#E6407B',
       secondary: '#CCC',
       highlight: '#FF2353',
