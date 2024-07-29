@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, Image, Pressable } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image, Pressable, FlatList } from 'react-native'
 import React from 'react'
 import ScreenLayout from 'src/components/ScreenLayout'
 import NavWithSearch from 'src/components/NavWithSearch'
@@ -6,23 +6,41 @@ import ArtikelPreview from 'src/components/ArtikelPreview'
 import VideoPreview from 'src/components/VideoPreview'
 import { Link } from 'expo-router'
 
-const ParentProTips = () => {
+const dataVideo = [
+  {
+    title: 'Tips Parenting Ibu Untuk Anak (Jaman Sekarang Sama Dulu Beda?)',
+    duration: '5h 20m',
+    comment: 20
+  },
+  {
+    title: 'Tips Parenting Ibu Untuk Anak (Jaman Sekarang Sama Dulu Beda?)',
+    duration: '5h 20m',
+    comment: 20
+  },
+  {
+    title: 'Tips Parenting Ibu Untuk Anak (Jaman Sekarang Sama Dulu Beda?)',
+    duration: '5h 20m',
+    comment: 20
+  }
+]
+
+const ParentProHeader = () => {
   return (
-    <ScreenLayout>
-      <ScrollView>
-        <View className="bg-lightPink pt-8 pb-4 rounded-b-[20px] -mb-40">
-          <View className="flex flex-col items-center justify-center mx-6 mb-44">
-            <NavWithSearch placeholder="Cari artikel atau video..." />
-            <View className="flex flex-row items-center justify-between mt-8 w-full">
-              <Text className="text-lg font-semibold text-darkBlue">Artikel Terbaru</Text>
-              <Link asChild href="/parent-pro/artikel">
-                <Pressable>
-                  <Text className="text-xs font-semibold text-darkBlue">Lihat Lainnya</Text>
-                </Pressable>
-              </Link>
-            </View>
+    <View>
+      <View className="bg-lightPink pt-8 pb-4 rounded-b-[20px]">
+        <View className="flex flex-col items-center justify-center mx-6 mb-44">
+          <NavWithSearch placeholder="Cari artikel atau video..." />
+          <View className="flex flex-row items-center justify-between mt-8 w-full">
+            <Text className="text-lg font-semibold text-darkBlue">Artikel Terbaru</Text>
+            <Link asChild href="/parent-pro/artikel">
+              <Pressable>
+                <Text className="text-xs font-semibold text-darkBlue">Lihat Lainnya</Text>
+              </Pressable>
+            </Link>
           </View>
         </View>
+      </View>
+      <View className="-mt-40">
         <ArtikelPreview
           title="Games Mengasah Otak Anak? Emang Ada?"
           description="Dalam kehidupan sehari-hari, kita sering kali tidak menyadari betapa pentingnya kesehatan mental bagi ibu hamil untuk kesehatan janin anak..."
@@ -36,11 +54,28 @@ const ParentProTips = () => {
             </Pressable>
           </Link>
         </View>
-        <ScrollView horizontal className="mx-6 mt-6">
-          <VideoPreview className="mr-4" />
-          <VideoPreview className="mr-4" />
-          <VideoPreview />
-        </ScrollView>
+      </View>
+    </View>
+  )
+}
+
+const VideoSeparator = () => {
+  return <View className="w-4"></View>
+}
+
+const ParentProTips = () => {
+  return (
+    <ScreenLayout>
+      <ScrollView>
+        <ParentProHeader />
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ItemSeparatorComponent={VideoSeparator}
+          data={dataVideo}
+          renderItem={({ item }) => <VideoPreview {...item} />}
+          contentContainerStyle={{ paddingHorizontal: 24 }}
+        />
       </ScrollView>
     </ScreenLayout>
   )
