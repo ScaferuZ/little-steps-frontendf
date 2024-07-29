@@ -23,10 +23,18 @@ const ParentProTips = () => {
             </View>
           </View>
         </View>
-        <ArtikelPreview />
+        <ArtikelPreview
+          title="Games Mengasah Otak Anak? Emang Ada?"
+          description="Dalam kehidupan sehari-hari, kita sering kali tidak menyadari betapa pentingnya kesehatan mental bagi ibu hamil untuk kesehatan janin anak..."
+          date={17}
+        />
         <View className="flex flex-row items-center justify-between mt-8 mx-6">
           <Text className="text-lg font-semibold text-darkBlue">Video Terbaru</Text>
-          <Text className="text-xs font-semibold text-darkBlue">Lihat Lainnya</Text>
+          <Link asChild href="/parent-pro/video">
+            <Pressable>
+              <Text className="text-xs font-semibold text-darkBlue">Lihat Lainnya</Text>
+            </Pressable>
+          </Link>
         </View>
         <ScrollView horizontal className="mx-6 mt-6">
           <VideoPreview className="mr-4" />

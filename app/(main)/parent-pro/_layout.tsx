@@ -17,6 +17,7 @@ export default function AppLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="artikel" options={{ headerShown: false }} />
+      <Stack.Screen name="video" options={{ headerShown: false }} />
     </Stack>
   )
 }
