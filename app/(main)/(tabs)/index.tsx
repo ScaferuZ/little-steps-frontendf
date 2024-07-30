@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView, Pressable } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import ScreenLayout from 'src/components/ScreenLayout'
 import SearchBar from 'src/components/SearchBar'
@@ -45,24 +45,33 @@ export default function Beranda() {
         </View>
         <View className="flex flex-col items-center justify-center mx-6  -mt-16">
           {/* Calories dashboard */}
-          <View className="bg-[#FFF5F8] w-full rounded-lg">
-            <CalorieCounter />
-            <View className="flex flex-row justify-around px-4">
-              <NutrientDetailCard icon="fitness-outline" amount="20g" label="Fat" color="#4caf50" />
-              <NutrientDetailCard
-                icon="restaurant-outline"
-                amount="50g"
-                label="Carbs"
-                color="#ff9800"
-              />
-              <NutrientDetailCard
-                icon="nutrition-outline"
-                amount="24g"
-                label="Protein"
-                color="#f44336"
-              />
-            </View>
-          </View>
+          <Link asChild href="/nutriwiseDashboard" className="w-full">
+            <Pressable>
+              <View className="bg-[#FFF5F8] w-full rounded-lg">
+                <CalorieCounter />
+                <View className="flex flex-row justify-around px-4">
+                  <NutrientDetailCard
+                    icon="fitness-outline"
+                    amount="20g"
+                    label="Fat"
+                    color="#4caf50"
+                  />
+                  <NutrientDetailCard
+                    icon="restaurant-outline"
+                    amount="50g"
+                    label="Carbs"
+                    color="#ff9800"
+                  />
+                  <NutrientDetailCard
+                    icon="nutrition-outline"
+                    amount="24g"
+                    label="Protein"
+                    color="#f44336"
+                  />
+                </View>
+              </View>
+            </Pressable>
+          </Link>
           {/* Tabs */}
           <View className="flex flex-row items-center justify-between w-full mt-6">
             <QuickMenuItem

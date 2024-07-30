@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, Pressable, GestureResponderEvent } from 'react-native'
 import React from 'react'
 import Feather from '@expo/vector-icons/Feather'
 import { Link } from 'expo-router'
@@ -8,9 +8,16 @@ interface ProfileFunctionProps {
   title: string
   subTitle?: string
   href?: string
+  onPress?: (event: GestureResponderEvent) => void
 }
 
-const ProfileFunction: React.FC<ProfileFunctionProps> = ({ icon, title, subTitle, href }) => {
+const ProfileFunction: React.FC<ProfileFunctionProps> = ({
+  icon,
+  title,
+  subTitle,
+  href,
+  onPress
+}) => {
   const content = (
     <View className="flex flex-row items-center justify-between">
       <View className="bg-lightPink p-3 rounded-full">
@@ -27,12 +34,12 @@ const ProfileFunction: React.FC<ProfileFunctionProps> = ({ icon, title, subTitle
   if (href) {
     return (
       <Link href={href} asChild>
-        <Pressable>{content}</Pressable>
+        <Pressable onPress={onPress}>{content}</Pressable>
       </Link>
     )
   }
 
-  return <Pressable>{content}</Pressable>
+  return <Pressable onPress={onPress}>{content}</Pressable>
 }
 
 export default ProfileFunction

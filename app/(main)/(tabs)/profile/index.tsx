@@ -1,8 +1,10 @@
-import { View, Text, Image } from 'react-native'
+import { useSession } from 'app/ctx'
+import { View, Text, Image, Pressable } from 'react-native'
 import ScreenLayout from 'src/components/ScreenLayout'
 import ProfileFunction from 'src/components/profil/ProfileFunction'
 
 export default function Profile() {
+  const { signOut, session } = useSession()
   return (
     <ScreenLayout>
       <View className="flex flex-col bg-lightPink py-16 items-center justify-center">
@@ -26,7 +28,12 @@ export default function Profile() {
           <View className="h-4"></View>
           <ProfileFunction icon="tool" title="Pengaturan" subTitle="Atur pengaturanmu disini" />
           <View className="h-4"></View>
-          <ProfileFunction icon="log-out" title="Keluar" subTitle="Keluar dari akun" />
+          <ProfileFunction
+            icon="log-out"
+            title="Keluar"
+            subTitle="Keluar dari akun"
+            onPress={() => signOut()}
+          />
         </View>
         <Text className="mx-6 font-medium">Lainnya</Text>
         <View className="mx-6 my-5 px-4 py-6 bg-white rounded-xl">

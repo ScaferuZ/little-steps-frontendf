@@ -18,6 +18,7 @@ export default function AppLayout() {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="notifikasi" options={{ headerShown: false }} />
       <Stack.Screen name="nutriwise" options={{ headerShown: false }} />
+      <Stack.Screen name="nutriwiseDashboard" options={{ headerShown: false }} />
       <Stack.Screen name="parent-pro" options={{ headerShown: false }} />
     </Stack>
   )
