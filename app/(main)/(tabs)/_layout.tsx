@@ -1,5 +1,5 @@
 import React from 'react'
-import FontAwesome from '@expo/vector-icons/FontAwesome6'
+import Feather from '@expo/vector-icons/Feather'
 import { Link, Tabs } from 'expo-router'
 import { Pressable } from 'react-native'
 import { useClientOnlyValue } from 'src/hooks/useClientOnlyValue'
@@ -8,11 +8,8 @@ import { appTheme } from 'src/config/theme'
 import '../../global.css'
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name']
-  color: string
-}) {
-  return <FontAwesome size={24} style={{ marginBottom: -3 }} {...props} />
+function TabBarIcon(props: { name: React.ComponentProps<typeof Feather>['name']; color: string }) {
+  return <Feather size={24} style={{ marginBottom: -3 }} {...props} />
 }
 
 export default function TabLayout() {
@@ -28,7 +25,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Beranda',
-          tabBarIcon: ({ color }) => <TabBarIcon name="house-chimney" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
         }}
       />
       <Tabs.Screen
@@ -42,7 +39,7 @@ export default function TabLayout() {
         name="moms-connect/index"
         options={{
           title: 'Moms Connect',
-          tabBarIcon: ({ color }) => <TabBarIcon name="message" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="message-circle" color={color} />
         }}
       />
       <Tabs.Screen
