@@ -15,7 +15,12 @@ export default function Profile() {
       </View>
       <View className="bg-background -mt-3 rounded-t-2xl h-full">
         <View className="mx-6 my-5 px-4 py-6 bg-white rounded-xl">
-          <ProfileFunction icon="user-o" title="Akun Saya" subTitle="Edit Profile" />
+          <ProfileFunction
+            icon="user-o"
+            title="Akun Saya"
+            subTitle="Edit Profile"
+            href="/profile/edit"
+          />
           <View className="h-4"></View>
           <ProfileFunction icon="star-o" title="Diamond" subTitle="Diamond Saya" />
           <View className="h-4"></View>
