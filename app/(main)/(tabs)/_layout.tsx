@@ -32,7 +32,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="wiseguard/index"
+        name="wiseguard"
         options={{
           title: 'WiseGuard',
           tabBarIcon: ({ color }) => <TabBarIcon name="heart" color={color} />
