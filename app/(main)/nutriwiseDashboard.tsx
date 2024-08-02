@@ -20,18 +20,26 @@ const Nutriwise = () => {
           <View className="bg-white w-full rounded-lg">
             <CalorieCounter />
             <View className="flex flex-row justify-around px-4">
-              <NutrientDetailCard icon="fitness-outline" amount="20g" label="Fat" color="#4caf50" />
               <NutrientDetailCard
-                icon="restaurant-outline"
+                icon="percent"
+                amount="20g"
+                label="Fat"
+                color="#0AA7FF"
+                bgColor="#FFF"
+              />
+              <NutrientDetailCard
+                icon="apple-whole"
                 amount="50g"
                 label="Carbs"
                 color="#ff9800"
+                bgColor="#FFF"
               />
               <NutrientDetailCard
-                icon="nutrition-outline"
+                icon="egg"
                 amount="24g"
                 label="Protein"
                 color="#f44336"
+                bgColor="#FFF"
               />
             </View>
           </View>
