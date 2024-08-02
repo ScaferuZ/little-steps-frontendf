@@ -50,24 +50,14 @@ export default function Beranda() {
               <View className="bg-[#FFF5F8] w-full rounded-lg">
                 <CalorieCounter />
                 <View className="flex flex-row justify-around px-4">
+                  <NutrientDetailCard icon="percent" amount="20g" label="Fat" color="#0AA7FF" />
                   <NutrientDetailCard
-                    icon="fitness-outline"
-                    amount="20g"
-                    label="Fat"
-                    color="#4caf50"
-                  />
-                  <NutrientDetailCard
-                    icon="restaurant-outline"
+                    icon="apple-whole"
                     amount="50g"
                     label="Carbs"
                     color="#ff9800"
                   />
-                  <NutrientDetailCard
-                    icon="nutrition-outline"
-                    amount="24g"
-                    label="Protein"
-                    color="#f44336"
-                  />
+                  <NutrientDetailCard icon="egg" amount="24g" label="Protein" color="#f44336" />
                 </View>
               </View>
             </Pressable>

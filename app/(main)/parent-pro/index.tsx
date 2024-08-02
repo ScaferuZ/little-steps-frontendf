@@ -74,7 +74,7 @@ const ParentProTips = () => {
           ItemSeparatorComponent={VideoSeparator}
           data={dataVideo}
           renderItem={({ item }) => <VideoPreview {...item} />}
-          contentContainerStyle={{ paddingHorizontal: 24 }}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 5 }}
         />
       </ScrollView>
     </ScreenLayout>

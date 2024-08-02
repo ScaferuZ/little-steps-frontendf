@@ -11,7 +11,18 @@ interface VideoPreviewProps {
 
 const VideoPreview: React.FC<VideoPreviewProps> = ({ className, title, duration, comment }) => {
   return (
-    <View className={`${className} flex flex-col bg-white p-2 w-48 justify-center rounded-2xl`}>
+    <View
+      style={{
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3 // for Android
+      }}
+      className={`${className} flex flex-col bg-white p-2 w-48 justify-center rounded-2xl`}>
       <Image
         className="h-36 rounded-2xl"
         source={{ uri: 'https://via.placeholder.com/50' }}

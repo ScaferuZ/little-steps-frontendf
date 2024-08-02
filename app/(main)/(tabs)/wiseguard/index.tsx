@@ -46,7 +46,7 @@ const WiseGuardHeader = () => {
           description="Dalam kehidupan sehari-hari, kita sering kali tidak menyadari betapa pentingnya kesehatan mental bagi ibu hamil untuk kesehatan janin anak..."
           date={17}
         />
-        <View className="flex flex-row items-center justify-between mt-8 mx-6">
+        <View className="flex flex-row items-center justify-between mt-8 mx-6 mb-3">
           <Text className="text-lg font-semibold text-darkBlue">Video Terbaru</Text>
           <Link asChild href="/wiseguard/video">
             <Pressable>
@@ -74,7 +74,7 @@ const WiseGuardScreen = () => {
           ItemSeparatorComponent={VideoSeparator}
           data={dataVideo}
           renderItem={({ item }) => <VideoPreview {...item} />}
-          contentContainerStyle={{ paddingHorizontal: 24 }}
+          contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 5 }}
         />
       </ScrollView>
     </ScreenLayout>
