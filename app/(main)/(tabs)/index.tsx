@@ -9,8 +9,28 @@ import NutrientDetailCard from 'src/components/home/NutrientDetail'
 import QuickMenuItem from 'src/components/home/QuickMenuItem'
 import Artikelcard from 'src/components/home/Artikelcard'
 import { Link } from 'expo-router'
+import { useSession } from 'app/ctx'
+import Spinner from 'src/components/Spinner'
+import { useProfile } from 'src/services/Profile/Profile.url'
 
 export default function Beranda() {
+  const { user, signOut } = useSession()
+
+  const { data: profile, isLoading, error } = useProfile()
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (error) {
+    return (
+      <ScreenLayout>
+        <View className="flex-1 items-center justify-center">
+          <Text>Error loading profile: {error.message}</Text>
+        </View>
+      </ScreenLayout>
+    )
+  }
   return (
     <ScreenLayout>
       <ScrollView>
@@ -21,10 +41,10 @@ export default function Beranda() {
               <View className="flex flex-row items-center">
                 <Image
                   className="w-12 h-12 rounded-full"
-                  source={{ uri: 'https://via.placeholder.com/50' }}
+                  source={{ uri: profile?.profilePictureUri }}
                 />
                 <View className="ml-4">
-                  <Text className="text-lg font-bold text-primary">Halo, Putri Sari</Text>
+                  <Text className="text-lg font-bold text-primary">Halo, {profile?.name}</Text>
                   <Text className="text-sm text-gray-500">18 Januari 2024 | Kamis</Text>
                 </View>
               </View>
@@ -37,9 +57,6 @@ export default function Beranda() {
             {/* Search bar and filter */}
             <View className="flex flex-row items-center justify-center mb-24">
               <SearchBar placeholder="Cari" />
-              <TouchableOpacity className="flex items-center justify-center p-3 bg-primary rounded-lg ml-2">
-                <Feather name="sliders" size={18} color="white" />
-              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -49,7 +66,7 @@ export default function Beranda() {
             <Pressable>
               <View className="bg-[#FFF5F8] w-full rounded-lg">
                 <CalorieCounter />
-                <View className="flex flex-row justify-around px-4">
+                <View className="flex flex-row justify-around px-4 mt-3">
                   <NutrientDetailCard icon="percent" amount="20g" label="Fat" color="#0AA7FF" />
                   <NutrientDetailCard
                     icon="apple-whole"

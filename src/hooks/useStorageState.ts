@@ -63,3 +63,16 @@ export function useStorageState(key: string): UseStateHook<string> {
 
   return [state, setValue]
 }
+
+export async function getStorageItemAsync(key: string): Promise<string | null> {
+  if (Platform.OS === 'web') {
+    try {
+      return localStorage.getItem(key)
+    } catch (e) {
+      console.error('Local storage is unavailable:', e)
+      return null
+    }
+  } else {
+    return await SecureStore.getItemAsync(key)
+  }
+}
