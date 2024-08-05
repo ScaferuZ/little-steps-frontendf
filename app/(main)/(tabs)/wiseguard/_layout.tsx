@@ -3,13 +3,13 @@ import { Redirect, Stack } from 'expo-router'
 import Spinner from 'src/components/Spinner'
 
 export default function AppLayout() {
-  const { session, isLoading } = useSession()
+  const { user, accessToken, isLoading } = useSession()
 
   if (isLoading) {
     return <Spinner />
   }
 
-  if (!session) {
+  if (!user || !accessToken) {
     return <Redirect href="/login" />
   }
 
