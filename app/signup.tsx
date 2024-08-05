@@ -1,24 +1,11 @@
 import { StyleSheet, TextInput, View, Text } from 'react-native'
-import { useSession } from './ctx'
-import { router } from 'expo-router'
 import styled from 'styled-components/native'
 import ScreenLayout from 'src/components/ScreenLayout'
-import Input from 'src/components/Input'
-import { AntDesign } from '@expo/vector-icons'
-
-import LinkButton from 'src/components/LinkButton'
-import Button from 'src/components/Button'
 
 import './global.css'
 import RegisterForm from 'src/components/forms/RegisterForm/RegisterForm'
 
 export default function Login() {
-  const { signIn } = useSession()
-  const handleLogin = () => {
-    signIn()
-    router.replace('/')
-  }
-
   return (
     <ScreenLayout>
       <S.Content>

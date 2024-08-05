@@ -9,6 +9,16 @@ import Button from 'src/components/Button'
 import { Link } from 'expo-router'
 import { AntDesign } from '@expo/vector-icons'
 import LinkButton from 'src/components/LinkButton'
+import AvatarUploadArea from 'src/components/elements/AvatarUploadArea'
+
+interface FormData {
+  name: string
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
+  avatar: { uri: string; type: string; name: string }
+}
 
 const RegisterForm = () => {
   const [hidePassword, setHidePassword] = useState(true)
@@ -20,9 +30,11 @@ const RegisterForm = () => {
   } = useForm({
     defaultValues: {
       name: '',
+      username: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      avatar: null
     },
     resolver: zodResolver(registerSchema)
   })
@@ -37,13 +49,21 @@ const RegisterForm = () => {
 
   return (
     <>
+      <View className="h-2" />
+      <Controller
+        control={control}
+        name={'avatar'}
+        render={({ field: { value, onChange } }) => (
+          <AvatarUploadArea value={value} onChange={onChange} error={errors?.avatar?.message} />
+        )}
+      />
       <Controller
         control={control}
         name={'name'}
         render={({ field: { value, onChange, onBlur } }) => (
           <Input
             label="Nama"
-            placeholder="Masukkan nama anda"
+            placeholder="Masukkan nama"
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
@@ -51,14 +71,29 @@ const RegisterForm = () => {
           />
         )}
       />
-      <View className="h-4" />
+      <View className="h-2" />
+      <Controller
+        control={control}
+        name={'username'}
+        render={({ field: { value, onChange, onBlur } }) => (
+          <Input
+            label="Username"
+            placeholder="Masukkan username"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            error={errors?.username?.message}
+          />
+        )}
+      />
+      <View className="h-2" />
       <Controller
         control={control}
         name={'email'}
         render={({ field: { value, onChange, onBlur } }) => (
           <Input
             label="Email"
-            placeholder="Masukkan email anda"
+            placeholder="Masukkan email"
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
@@ -66,7 +101,7 @@ const RegisterForm = () => {
           />
         )}
       />
-      <View className="h-4" />
+      <View className="h-2" />
       <Controller
         control={control}
         name={'password'}
@@ -89,7 +124,7 @@ const RegisterForm = () => {
           />
         )}
       />
-      <View className="h-4" />
+      <View className="h-2" />
       <Controller
         control={control}
         name={'confirmPassword'}
@@ -113,24 +148,24 @@ const RegisterForm = () => {
         )}
       />
 
-      <View className="mt-16">
+      <View className="mt-8">
         <Button variant="primary" onPress={handleSubmit(onSubmit)} className="w-full">
           Masuk
         </Button>
-        <View className="flex flex-row items-center mt-16">
-          <View className="flex-1 h-[1px] bg-grey" />
-          <View>
-            <Text className="px-4 text-center text-sm text-grey">atau daftar dengan</Text>
-          </View>
-          <View className="flex-1 h-[1px] bg-grey" />
-        </View>
-        <Button className="w-full mt-8 p-4 font-semibold drop-shadow-2xl" variant="outline">
-          <View className="flex flex-row items-center justify-center space-x-4">
-            <AntDesign name="google" size={16} />
-            <Text className="ml-4 font-bold">Google</Text>
-          </View>
-        </Button>
-        <View className="flex flex-row w-full justify-center items-center mt-11">
+        {/* <View className="flex flex-row items-center mt-8"> */}
+        {/*   <View className="flex-1 h-[1px] bg-grey" /> */}
+        {/*   <View> */}
+        {/*     <Text className="px-4 text-center text-sm text-grey">atau daftar dengan</Text> */}
+        {/*   </View> */}
+        {/*   <View className="flex-1 h-[1px] bg-grey" /> */}
+        {/* </View> */}
+        {/* <Button className="w-full mt-8 p-4 font-semibold drop-shadow-2xl" variant="outline"> */}
+        {/*   <View className="flex flex-row items-center justify-center space-x-4"> */}
+        {/*     <AntDesign name="google" size={16} /> */}
+        {/*     <Text className="ml-4 font-bold">Google</Text> */}
+        {/*   </View> */}
+        {/* </Button> */}
+        <View className="flex flex-row w-full justify-center items-center mt-4">
           <Text className="text-center text-sm text-grey">Sudah memiliki akun? </Text>
           <LinkButton
             href="/login"
