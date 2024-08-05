@@ -10,6 +10,7 @@ import LinkButton from 'src/components/LinkButton'
 import Button from 'src/components/Button'
 
 import './global.css'
+import RegisterForm from 'src/components/forms/RegisterForm/RegisterForm'
 
 export default function Login() {
   const { signIn } = useSession()
@@ -24,34 +25,7 @@ export default function Login() {
         <S.Title>Daftarkan Diri,</S.Title>
         <S.Text>Daftarkan akunmu sekarang!</S.Text>
         <View style={styles.separator} />
-        <Input className="mb-6" label="Nama" />
-        <Input className="mb-6" label="Email" />
-        <Input className="mb-6" label="Kata Sandi" secureTextEntry={true} />
-        <Input label="Konfirmasi Kata Sandi" secureTextEntry={true} />
-        <Button className="w-full mt-11 p-4" variant="primary" onPress={handleLogin}>
-          Daftar
-        </Button>
-        <View className="flex flex-row items-center mt-16">
-          <View className="flex-1 h-[1px] bg-grey" />
-          <View>
-            <Text className="px-4 text-center text-sm text-grey">atau daftar dengan</Text>
-          </View>
-          <View className="flex-1 h-[1px] bg-grey" />
-        </View>
-        <Button className="w-full mt-8 p-4 font-semibold drop-shadow-2xl" variant="google">
-          <View className="flex flex-row items-center justify-center space-x-4">
-            <AntDesign name="google" size={16} />
-            <Text className="ml-4 font-bold">Google</Text>
-          </View>
-        </Button>
-        <View className="flex flex-row w-full justify-center items-center mt-11">
-          <Text className="text-center text-sm text-grey">Sudah memiliki akun? </Text>
-          <LinkButton
-            href="/login"
-            className="text-center text-sm font-bold text-primary ml-1"
-            text="Masuk"
-          />
-        </View>
+        <RegisterForm />
       </S.Content>
     </ScreenLayout>
   )
@@ -74,7 +48,7 @@ const styles = StyleSheet.create({
   },
 
   separator: {
-    marginVertical: 30,
+    marginVertical: 5,
     height: 1,
     width: '80%'
   },
@@ -91,7 +65,6 @@ const styles = StyleSheet.create({
 const S = {
   Content: styled.View`
     flex: 1;
-    align-items: flex-start;
     justify-content: center;
     margin: ${(p) => p.theme.size(30, 'px')};
   `,

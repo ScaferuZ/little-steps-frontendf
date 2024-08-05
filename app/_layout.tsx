@@ -7,10 +7,14 @@ import styled, { ThemeProvider, type DefaultTheme } from 'styled-components/nati
 import { appTheme, navTheme } from 'src/config/theme'
 import { SessionProvider } from './ctx'
 import useCacheAssets from 'src/hooks/useCacheAssets'
+import { RootSiblingParent } from 'react-native-root-siblings'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
 
 import './global.css'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 export { ErrorBoundary } from 'expo-router'
 
@@ -43,16 +47,20 @@ export default function AppLayout() {
 
 function RootAppLayout() {
   return (
-    <ThemeProvider theme={appTheme as DefaultTheme}>
-      <StatusBar style="light" />
-      <S.AppWrapper>
-        <SessionProvider>
-          <NavProvider value={navTheme}>
-            <Slot screenOptions={{ headerShown: false }} />
-          </NavProvider>
-        </SessionProvider>
-      </S.AppWrapper>
-    </ThemeProvider>
+    <RootSiblingParent>
+      <ThemeProvider theme={appTheme as DefaultTheme}>
+        <QueryClientProvider client={queryClient}>
+          <StatusBar style="light" />
+          <S.AppWrapper>
+            <SessionProvider>
+              <NavProvider value={navTheme}>
+                <Slot screenOptions={{ headerShown: false }} />
+              </NavProvider>
+            </SessionProvider>
+          </S.AppWrapper>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </RootSiblingParent>
   )
 }
 
