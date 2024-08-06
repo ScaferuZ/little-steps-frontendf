@@ -26,7 +26,17 @@
       "favicon": "./src/assets/images/app-icon.png",
       "bundler": "metro"
     },
-    "plugins": ["expo-router", "expo-secure-store"],
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Application to access your camera",
+          "recordAudioAndroid": true
+        }
+      ]
+    ],
     "extra": {
       "router": {
         "origin": false
