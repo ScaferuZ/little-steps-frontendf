@@ -30,3 +30,14 @@ export function useLogout(options?: UseMutationOptions<void, unknown, void>) {
 
   return { mutate, isPending, isSuccess }
 }
+
+// useSignup hook
+export function useSignup(options?: UseMutationOptions<SignupResponse, unknown, SignUpForm>) {
+  return useMutation<SignupResponse, unknown, SignUpForm>({
+    mutationFn: async (signupData: SignUpForm) => {
+      const response = await AuthServices.signup(signupData)
+      return response.data
+    },
+    ...options
+  })
+}

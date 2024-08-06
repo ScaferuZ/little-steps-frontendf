@@ -14,7 +14,6 @@ export const registerSchema = z
         name: z.string()
       })
       .nullable()
-      .refine((value) => value !== null, { message: 'Avatar harus diunggah' })
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Password dan konfirmasi password tidak cocok',

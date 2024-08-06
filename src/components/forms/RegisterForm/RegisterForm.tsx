@@ -3,13 +3,14 @@ import { Controller, useForm, SubmitHandler } from 'react-hook-form'
 import { registerSchema } from './schema'
 import Input from 'src/components/Input'
 import EyePassword from 'src/components/elements/EyePassword'
-import { useReducer, useState } from 'react'
-import { View, Text, Alert } from 'react-native'
+import { useState } from 'react'
+import { useSignup } from 'src/services/Auth/Auth.url'
+import { View, Text, Alert, ActivityIndicator } from 'react-native'
 import Button from 'src/components/Button'
-import { Link } from 'expo-router'
-import { AntDesign } from '@expo/vector-icons'
 import LinkButton from 'src/components/LinkButton'
 import AvatarUploadArea from 'src/components/elements/AvatarUploadArea'
+import { useRouter } from 'expo-router'
+import ToastMessage from 'src/components/elements/ToastMessage'
 
 interface FormData {
   name: string
@@ -17,12 +18,32 @@ interface FormData {
   email: string
   password: string
   confirmPassword: string
-  avatar: { uri: string; type: string; name: string }
+  avatar: { uri: string; type: string; name: string } | null
 }
 
 const RegisterForm = () => {
+  const router = useRouter()
   const [hidePassword, setHidePassword] = useState(true)
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true)
+
+  const signupMutation = useSignup({
+    onSuccess: (response) => {
+      console.log('Registration successful:', response)
+      ToastMessage({
+        message: 'Registration successful. Please log in with your new account.',
+        variant: 'success'
+      })
+
+      setTimeout(() => {
+        router.replace('/login')
+      }, 2000)
+    },
+    onError: (error) => {
+      console.error('Registration failed:', error)
+      ToastMessage({ message: 'Registration failed. Please try again.', variant: 'danger' })
+    }
+  })
+
   const {
     control,
     handleSubmit,
@@ -40,11 +61,16 @@ const RegisterForm = () => {
   })
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    Alert.alert('Successful', JSON.stringify(data))
-    console.log(data)
+    // Remove confirmPassword from the data sent to the server
+    const { confirmPassword, ...signupData } = data
 
-    // signIn()
-    // router.replace('/')
+    // Create the final data object to submit
+    const dataToSubmit: SignUpForm = {
+      ...signupData,
+      avatar: signupData.avatar || null // This ensures avatar is never undefined
+    }
+
+    signupMutation.mutate(dataToSubmit)
   }
 
   return (
@@ -149,22 +175,13 @@ const RegisterForm = () => {
       />
 
       <View className="mt-8">
-        <Button variant="primary" onPress={handleSubmit(onSubmit)} className="w-full">
-          Masuk
+        <Button
+          variant="primary"
+          onPress={handleSubmit(onSubmit)}
+          className="w-full"
+          disabled={signupMutation.isPending}>
+          {signupMutation.isPending ? 'Registering...' : 'Daftar'}
         </Button>
-        {/* <View className="flex flex-row items-center mt-8"> */}
-        {/*   <View className="flex-1 h-[1px] bg-grey" /> */}
-        {/*   <View> */}
-        {/*     <Text className="px-4 text-center text-sm text-grey">atau daftar dengan</Text> */}
-        {/*   </View> */}
-        {/*   <View className="flex-1 h-[1px] bg-grey" /> */}
-        {/* </View> */}
-        {/* <Button className="w-full mt-8 p-4 font-semibold drop-shadow-2xl" variant="outline"> */}
-        {/*   <View className="flex flex-row items-center justify-center space-x-4"> */}
-        {/*     <AntDesign name="google" size={16} /> */}
-        {/*     <Text className="ml-4 font-bold">Google</Text> */}
-        {/*   </View> */}
-        {/* </Button> */}
         <View className="flex flex-row w-full justify-center items-center mt-4">
           <Text className="text-center text-sm text-grey">Sudah memiliki akun? </Text>
           <LinkButton
