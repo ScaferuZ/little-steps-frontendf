@@ -12,15 +12,16 @@ import { Link } from 'expo-router'
 import { useSession } from 'app/ctx'
 import Spinner from 'src/components/Spinner'
 import { useProfile } from 'src/services/Profile/Profile.url'
+import Skeleton from 'src/components/elements/Skeleton'
 
 export default function Beranda() {
   const { user, signOut } = useSession()
 
   const { data: profile, isLoading, error } = useProfile()
 
-  if (isLoading) {
-    return <Spinner />
-  }
+  // if (isLoading) {
+  //   return <Spinner />
+  // }
 
   if (error) {
     return (
@@ -41,10 +42,21 @@ export default function Beranda() {
               <View className="flex flex-row items-center">
                 <Image
                   className="w-12 h-12 rounded-full"
-                  source={{ uri: profile?.profilePictureUri }}
+                  source={
+                    profile?.profilePictureUri
+                      ? { uri: profile.profilePictureUri }
+                      : require('src/assets/images/default_avatar.png')
+                  }
                 />
                 <View className="ml-4">
-                  <Text className="text-lg font-bold text-primary">Halo, {profile?.name}</Text>
+                  <Text className="text-lg font-bold text-primary">
+                    Halo,{' '}
+                    {isLoading ? (
+                      <Skeleton width={100} height={24} style={{ marginTop: 2 }} />
+                    ) : (
+                      profile?.name
+                    )}
+                  </Text>
                   <Text className="text-sm text-gray-500">18 Januari 2024 | Kamis</Text>
                 </View>
               </View>

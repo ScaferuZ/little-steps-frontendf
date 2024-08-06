@@ -49,7 +49,7 @@ function RootAppLayout() {
     <RootSiblingParent>
       <ThemeProvider theme={appTheme as DefaultTheme}>
         <QueryClientProvider client={queryClient}>
-          <StatusBar style="light" />
+          <StatusBar style="dark" />
           <S.AppWrapper>
             <SessionProvider>
               <NavProvider value={navTheme}>

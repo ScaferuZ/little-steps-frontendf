@@ -27,7 +27,7 @@ async function signup(signupData: SignUpForm): Promise<AxiosResponse<SignupRespo
     } as any)
   }
 
-  console.log('Sending signup data:', JSON.stringify(formData))
+  console.log('Sending signup data:', formData)
 
   return axios.post(url, formData, {
     headers: {

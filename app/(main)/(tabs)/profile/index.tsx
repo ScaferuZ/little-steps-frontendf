@@ -29,7 +29,11 @@ export default function Profile() {
         <Text className="text-primary font-semibold text-lg">User Profile</Text>
         <Image
           className="w-24 h-24 rounded-full mt-3 "
-          source={{ uri: profile?.profilePictureUri }}
+          source={
+            profile?.profilePictureUri
+              ? { uri: profile.profilePictureUri }
+              : require('src/assets/images/default_avatar.png')
+          }
         />
         <Text className="text-primary font-semibold text-xl mt-3">{profile?.name}</Text>
       </View>

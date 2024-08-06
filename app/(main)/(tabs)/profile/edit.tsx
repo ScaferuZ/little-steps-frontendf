@@ -4,8 +4,26 @@ import Input from 'src/components/Input'
 import ScreenLayout from 'src/components/ScreenLayout'
 import { AntDesign } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
+import { useProfile } from 'src/services/Profile/Profile.url'
+import Spinner from 'src/components/Spinner'
 
 export default function Profile() {
+  const { data: profile, isLoading, error } = useProfile()
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
+  if (error) {
+    return (
+      <ScreenLayout>
+        <View className="flex-1 items-center justify-center">
+          <Text>Error loading profile: {error.message}</Text>
+        </View>
+      </ScreenLayout>
+    )
+  }
+
   const router = useRouter()
   return (
     <ScreenLayout>
@@ -22,18 +40,20 @@ export default function Profile() {
         <View className="items-center justify-center mt-3">
           <Image
             className="w-24 h-24 rounded-full"
-            source={{ uri: 'https://via.placeholder.com/50' }}
+            source={
+              profile?.profilePictureUri
+                ? { uri: profile.profilePictureUri }
+                : require('src/assets/images/default_avatar.png')
+            }
           />
-          <Text className="text-primary font-semibold text-xl mt-3">Putri Sari</Text>
+          <Text className="text-primary font-semibold text-xl mt-3">{profile?.name}</Text>
         </View>
       </View>
       <View className="bg-background -mt-3 rounded-t-2xl h-full">
         <View className="mx-6 mt-9">
-          <Input label="Nama Lengkap" />
+          <Input label="Nama Lengkap" value={profile?.name} />
           <View className="h-4"></View>
-          <Input label="Email" />
-          <View className="h-4"></View>
-          <Input label="No Telepon" />
+          <Input label="Email" value={profile?.email} />
           <View className="h-4"></View>
           <Input label="Password" secureTextEntry />
           <View className="h-10"></View>
