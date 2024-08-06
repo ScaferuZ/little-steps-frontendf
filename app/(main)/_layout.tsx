@@ -20,6 +20,7 @@ export default function AppLayout() {
       <Stack.Screen name="nutriwise" options={{ headerShown: false }} />
       <Stack.Screen name="nutriwiseDashboard" options={{ headerShown: false }} />
       <Stack.Screen name="parent-pro" options={{ headerShown: false }} />
+      <Stack.Screen name="diamond/index" options={{ headerShown: false }} />
     </Stack>
   )
 }
