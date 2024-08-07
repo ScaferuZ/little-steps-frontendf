@@ -1,39 +1,52 @@
+import { useRouter } from 'expo-router'
 import React from 'react'
-import { View, Text, FlatList, Pressable } from 'react-native'
-import { Link } from 'expo-router'
-import { dummyArticles, Article } from '../constant'
+import { View, Text, FlatList } from 'react-native'
+import ArtikelPreview from 'src/components/ArtikelPreview'
+import Button from 'src/components/Button'
 import Navbar from 'src/components/Navbar'
+import Spinner from 'src/components/Spinner'
+import { useAllArticles } from 'src/services/Articles/Articles.url'
 
-const ArticleItem = ({ item }: { item: Article }) => (
-  <Link href={`/articles/${item.id}`} asChild>
-    <Pressable className="bg-white p-4 mb-2 rounded-lg shadow">
-      <Text className="text-lg font-bold mb-1">{item.title}</Text>
-      <Text className="text-sm text-gray-600 mb-1">
-        By {item.author} on {item.publishDate}
-      </Text>
-      <Text className="text-base text-gray-800" numberOfLines={2}>
-        {item.content}
-      </Text>
-    </Pressable>
-  </Link>
-)
+const ArtikelList: React.FC = () => {
+  const { data, isLoading, error } = useAllArticles()
+  const router = useRouter()
 
-export default function ArticlesManagement() {
+  if (isLoading) return <Spinner />
+  if (error) return <Text>An error occurred: {(error as Error).message}</Text>
+
+  console.log('Data:', data)
+
+  if (!data) return <Text>No data received</Text>
+  if (!data.data) return <Text>No articles data found</Text>
+  if (!Array.isArray(data.data)) return <Text>Articles data is not an array</Text>
+  if (data.data.length === 0) return <Text>No articles found</Text>
+
   return (
-    <View className="flex-1 p-4 bg-lightPink">
-      <Navbar title="Article" />
-      <View className="h-4" />
-      <Link href="/articles/create" asChild>
-        <Pressable className="bg-green-500 p-3 rounded mb-4">
-          <Text className="text-white text-center font-bold">Create New Article</Text>
-        </Pressable>
-      </Link>
+    <View style={{ flex: 1 }}>
+      <View className="mb-4 mx-6">
+        <Navbar title="Article Management" />
+        <Button variant="primary" onPress={() => router.push('/articles/create')}>
+          Add Article
+        </Button>
+      </View>
       <FlatList
-        data={dummyArticles}
-        renderItem={({ item }) => <ArticleItem item={item} />}
+        data={data.data}
+        renderItem={({ item }) => (
+          <ArtikelPreview
+            title={item.title}
+            content={item.content}
+            thumbnailUri={item.thumbnailUri}
+            type={item.type}
+            category={item.category}
+            onPress={() => router.push(`/articles/${item.id}`)}
+          />
+        )}
         keyExtractor={(item) => item.id}
-        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 20 }}
+        ListFooterComponent={<View style={{ height: 20 }} />}
       />
     </View>
   )
 }
+
+export default ArtikelList

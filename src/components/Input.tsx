@@ -11,6 +11,8 @@ interface InputProps extends TextInputProps {
   rightIcon?: React.ReactNode
   className?: string
   readonlyPlaceholder?: boolean
+  multiline?: boolean
+  numberOfLines?: number
 }
 
 const Input = forwardRef<TextInput, InputProps>(
@@ -25,6 +27,8 @@ const Input = forwardRef<TextInput, InputProps>(
       rightIcon,
       className = '',
       readonlyPlaceholder = false,
+      multiline = false,
+      numberOfLines = 4,
       ...props
     },
     ref
@@ -46,8 +50,13 @@ const Input = forwardRef<TextInput, InputProps>(
             editable={!readonlyPlaceholder}
             className={`border-b-primary border-b-2 py-4 w-full ${
               leftIcon ? 'pl-10' : ''
-            } ${rightIcon ? 'pr-10' : ''} ${error ? 'border-red-500' : 'border-[#DADAE0]'} ${readonlyPlaceholder ? 'bg-gray-100' : 'bg-transparent'}`}
+            } ${rightIcon ? 'pr-10' : ''} ${error ? 'border-red-500' : 'border-[#DADAE0]'} ${
+              readonlyPlaceholder ? 'bg-gray-100' : 'bg-transparent'
+            } ${multiline ? 'h-32 text-top border-primary border-b-2 ' : ''}`}
             placeholderTextColor="#9CA3AF"
+            multiline={multiline}
+            numberOfLines={multiline ? numberOfLines : undefined}
+            textAlignVertical={multiline ? 'top' : 'center'}
             {...props}
           />
           {rightIcon && (
