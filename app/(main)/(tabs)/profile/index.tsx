@@ -1,6 +1,7 @@
 import { useSession } from 'app/ctx'
 import { Link } from 'expo-router'
 import { View, Text, Image, Pressable } from 'react-native'
+import Button from 'src/components/Button'
 import ScreenLayout from 'src/components/ScreenLayout'
 import Spinner from 'src/components/Spinner'
 import ProfileFunction from 'src/components/profil/ProfileFunction'
@@ -68,7 +69,7 @@ export default function Profile() {
             <>
               <View className="h-4"></View>
               <Link asChild href="/dashboard">
-                <ProfileFunction icon="tool" title="Dashboard Admin" subTitle="Admin CMS" />
+                <Button variant="outline">Admin</Button>
               </Link>
             </>
           )}
