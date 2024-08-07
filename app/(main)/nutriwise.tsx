@@ -39,7 +39,7 @@ interface NutritionCardProps {
 const NutritionCard: React.FC<NutritionCardProps> = ({ item }) => {
   return (
     <Card
-      className="overflow-hidden mx-6 mt-24"
+      className="overflow-hidden mx-6"
       containerStyle={{
         width: Dimensions.get('window').width * 0.9,
         alignSelf: 'center',
@@ -133,11 +133,11 @@ const NutriwiseScreen: React.FC = () => {
   return (
     <View>
       <View className="bg-lightPink pt-8 pb-4 rounded-b-[20px]">
-        <View className="flex flex-col items-center justify-center mx-6 mb-24">
+        <View className="flex flex-col items-center justify-center mx-6 mb-20">
           <Navbar title="Nutriwise" />
         </View>
       </View>
-      <View className="-mt-40">
+      <View className="-mt-20">
         <FlatList
           data={nutritionCardData}
           renderItem={({ item }) => <NutritionCard item={item} />}

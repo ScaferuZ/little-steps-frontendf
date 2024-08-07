@@ -1,4 +1,5 @@
 import { useSession } from 'app/ctx'
+import { Link } from 'expo-router'
 import { View, Text, Image, Pressable } from 'react-native'
 import ScreenLayout from 'src/components/ScreenLayout'
 import Spinner from 'src/components/Spinner'
@@ -8,25 +9,23 @@ import { useProfile } from 'src/services/Profile/Profile.url'
 export default function Profile() {
   const { signOut, session } = useSession()
   const { data: profile, isLoading, error } = useProfile()
+  const isAdmin = profile?.role === 'admin'
 
-  if (isLoading) {
-    return <Spinner />
-  }
+  const renderProfileContent = () => {
+    if (isLoading) {
+      return <Spinner />
+    }
 
-  if (error) {
-    return (
-      <ScreenLayout>
-        <View className="flex-1 items-center justify-center">
-          <Text>Error loading profile: {error.message}</Text>
+    if (error) {
+      return (
+        <View className="py-8">
+          <Text className="text-red-500 text-center">Error loading profile</Text>
         </View>
-      </ScreenLayout>
-    )
-  }
+      )
+    }
 
-  return (
-    <ScreenLayout>
-      <View className="flex flex-col bg-lightPink py-16 items-center justify-center">
-        <Text className="text-primary font-semibold text-lg">User Profile</Text>
+    return (
+      <>
         <Image
           className="w-24 h-24 rounded-full mt-3 "
           source={
@@ -36,6 +35,15 @@ export default function Profile() {
           }
         />
         <Text className="text-primary font-semibold text-xl mt-3">{profile?.name}</Text>
+      </>
+    )
+  }
+
+  return (
+    <ScreenLayout>
+      <View className="flex flex-col bg-lightPink py-16 items-center justify-center">
+        <Text className="text-primary font-semibold text-lg">User Profile</Text>
+        {renderProfileContent()}
       </View>
       <View className="bg-background -mt-3 rounded-t-2xl h-full">
         <View className="mx-6 my-5 px-4 py-6 bg-white rounded-xl">
@@ -56,6 +64,14 @@ export default function Profile() {
             subTitle="Keluar dari akun"
             onPress={() => signOut()}
           />
+          {isAdmin && (
+            <>
+              <View className="h-4"></View>
+              <Link asChild href="/dashboard">
+                <ProfileFunction icon="tool" title="Dashboard Admin" subTitle="Admin CMS" />
+              </Link>
+            </>
+          )}
         </View>
         <Text className="mx-6 font-medium">Lainnya</Text>
         <View className="mx-6 my-5 px-4 py-6 bg-white rounded-xl">

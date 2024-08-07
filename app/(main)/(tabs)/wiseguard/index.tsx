@@ -5,6 +5,8 @@ import NavWithSearch from 'src/components/NavWithSearch'
 import ArtikelPreview from 'src/components/ArtikelPreview'
 import VideoPreview from 'src/components/VideoPreview'
 import { Link } from 'expo-router'
+import Spinner from 'src/components/Spinner'
+import { useProfile } from 'src/services/Profile/Profile.url'
 
 const dataVideo = [
   {
