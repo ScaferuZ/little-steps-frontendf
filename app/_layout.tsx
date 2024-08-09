@@ -68,7 +68,5 @@ const S = {
     flex: 1;
     flex-direction: column;
     background-color: ${appTheme.background};
-    margin-bottom: -40px;
-    margin-top: -50px;
   `
 }

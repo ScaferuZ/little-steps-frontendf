@@ -10,6 +10,7 @@ interface Article {
 
 interface ArticleResponseData {
   articles: Article[]
+  find?: any
 }
 
 interface ArticleResponse {
@@ -38,6 +39,16 @@ interface CreateArticleForm {
   title: string
   content: string
   category: string
+  type?: boolean
+  thumbnailUri?: string | null
+  videoUri?: string | null
+}
+
+interface EditArticleForm {
+  id: string
+  title?: string
+  content?: string
+  category?: string
   type?: boolean
   thumbnailUri?: string | null
   videoUri?: string | null

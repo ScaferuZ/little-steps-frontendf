@@ -11,7 +11,7 @@ const Navbar: React.FC<NavbarProps> = ({ title }) => {
   const router = useRouter()
 
   return (
-    <View className="flex flex-row items-center justify-between mt-14">
+    <View className="flex flex-row items-center justify-between my-7">
       <TouchableOpacity className="bg-white p-2 rounded-xl" onPress={() => router.back()}>
         <AntDesign name="arrowleft" size={18} color="black" />
       </TouchableOpacity>
