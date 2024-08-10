@@ -53,3 +53,23 @@ interface EditArticleForm {
   thumbnailUri?: string | null
   videoUri?: string | null
 }
+
+interface oneArticleData {
+  id: string
+  title: string
+  content: string
+  thumbnailUri: string | null
+  videoUri: string | null
+  type: boolean
+  category: string
+  createdAt: string
+}
+
+interface oneArticleResponse {
+  code: number
+  status: string
+  recordsTotal: number
+  message: string
+  data: oneArticleData
+  error: null | string
+}

@@ -4,9 +4,9 @@ import React from 'react'
 interface ArtikelProps {
   title: string
   content: string
-  thumbnailUri: string | null
-  type: boolean
-  category: string
+  thumbnailUri?: string | null
+  type?: boolean
+  createdAt: string
   onPress?: () => void
 }
 
@@ -16,7 +16,7 @@ const ArtikelPreview: React.FC<ArtikelProps> = ({
   thumbnailUri,
   type,
   onPress,
-  category
+  createdAt
 }) => {
   return (
     <Pressable
@@ -36,11 +36,12 @@ const ArtikelPreview: React.FC<ArtikelProps> = ({
         <Text className="font-bold text-xl w-6/12">{title}</Text>
         <Image
           className="w-36 h-36 rounded-2xl"
-          source={{ uri: thumbnailUri || 'https://via.placeholder.com/50' }}
+          // TODO: change image source to thumbnailUri
+          source={require('../assets/images/article_placeholder.jpg')}
         />
       </View>
       <View className="flex flex-row items-center justify-between">
-        <Text className="text-grey text-xs font-normal">{category}</Text>
+        <Text className="text-grey text-xs font-normal">{createdAt}</Text>
         <Text className="text-black text-xl font-normal mr-1">...</Text>
       </View>
       <Text className="mt-3 font-light text-black text-justify" numberOfLines={3}>

@@ -5,6 +5,10 @@ import NavWithSearch from 'src/components/NavWithSearch'
 import ArtikelPreview from 'src/components/ArtikelPreview'
 import VideoPreview from 'src/components/VideoPreview'
 import { Link } from 'expo-router'
+import { useOneArticle } from 'src/services/Articles/Articles.url'
+
+import { format, differenceInHours, parseISO } from 'date-fns'
+import { id } from 'date-fns/locale'
 
 const dataVideo = [
   {
@@ -25,6 +29,26 @@ const dataVideo = [
 ]
 
 const ParentProHeader = () => {
+  const { data: article, isLoading, error } = useOneArticle()
+
+  if (isLoading) return <Text>Loading...</Text>
+  if (error) return <Text>Error: {error.message}</Text>
+  if (!article) return <Text>No article found</Text>
+
+  function formatArticleDate(dateString: string): string {
+    const date = parseISO(dateString)
+    const now = new Date()
+    const hoursDifference = differenceInHours(now, date)
+
+    if (hoursDifference < 24) {
+      return `kurang dari ${hoursDifference} jam`
+    } else {
+      return format(date, 'EEEE, dd MMMM', { locale: id })
+    }
+  }
+
+  const formattedDate = formatArticleDate(article.createdAt)
+
   return (
     <View>
       <View className="bg-lightPink pt-8 pb-4 rounded-b-[20px]">
@@ -41,11 +65,7 @@ const ParentProHeader = () => {
         </View>
       </View>
       <View className="-mt-40">
-        <ArtikelPreview
-          title="Games Mengasah Otak Anak? Emang Ada?"
-          description="Dalam kehidupan sehari-hari, kita sering kali tidak menyadari betapa pentingnya kesehatan mental bagi ibu hamil untuk kesehatan janin anak..."
-          date={17}
-        />
+        <ArtikelPreview title={article.title} content={article.content} createdAt={formattedDate} />
         <View className="flex flex-row items-center justify-between mt-8 mx-6">
           <Text className="text-lg font-semibold text-darkBlue">Video Terbaru</Text>
           <Link asChild href="/parent-pro/video">

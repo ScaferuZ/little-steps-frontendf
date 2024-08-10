@@ -76,13 +76,13 @@ const RegisterForm = () => {
   return (
     <>
       <View className="h-2" />
-      <Controller
-        control={control}
-        name={'avatar'}
-        render={({ field: { value, onChange } }) => (
-          <AvatarUploadArea value={value} onChange={onChange} error={errors?.avatar?.message} />
-        )}
-      />
+      {/* <Controller */}
+      {/*   control={control} */}
+      {/*   name={'avatar'} */}
+      {/*   render={({ field: { value, onChange } }) => ( */}
+      {/*     <AvatarUploadArea value={value} onChange={onChange} error={errors?.avatar?.message} /> */}
+      {/*   )} */}
+      {/* /> */}
       <Controller
         control={control}
         name={'name'}

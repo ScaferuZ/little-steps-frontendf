@@ -41,7 +41,7 @@ const CalorieCounter = () => {
           </G>
         </Svg>
         <View className="absolute items-center justify-center">
-          <Text className="text-4xl font-bold text-accent">473</Text>
+          <Text className="text-4xl font-bold text-accent">0</Text>
           <Text className="text-lg font-light text-gray-500">Calories</Text>
         </View>
       </View>
