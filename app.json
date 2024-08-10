@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Expo Router Typescript",
+    "name": "Little Steps",
     "slug": "expo-router-typescript",
     "scheme": "app",
     "version": "1.0.0",
@@ -20,7 +20,8 @@
         "foregroundImage": "./src/assets/images/app-icon.png",
         "backgroundColor": "#222"
       },
-      "package": "com.haytherecharlie.exporoutertypescript"
+      "package": "com.haytherecharlie.exporoutertypescript",
+      "permissions": ["android.permission.CAMERA", "android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./src/assets/images/app-icon.png",
@@ -35,11 +36,15 @@
           "cameraPermission": "Allow Application to access your camera",
           "recordAudioAndroid": true
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "a462a105-8cd6-409d-bb1e-961d5dbec43e"
       }
     }
   }
