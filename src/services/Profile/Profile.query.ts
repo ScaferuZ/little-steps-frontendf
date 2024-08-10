@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_URL } from '../url'
 import { getBearerHeader } from 'src/utils/services'
 import { getStorageItemAsync } from 'src/hooks/useStorageState'
 
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 async function getProfile(): Promise<ProfileResponse> {
   const url = `${BASE_URL}/api/users/profile`
   const accessToken = await getStorageItemAsync('accessToken')

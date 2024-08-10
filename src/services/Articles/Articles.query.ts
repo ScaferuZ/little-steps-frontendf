@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_URL } from '../url'
 import { getBasicHeader, getBearerHeader } from 'src/utils/services'
 import { getStorageItemAsync } from 'src/hooks/useStorageState'
+
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 
 async function getAllArticle(): Promise<ArticleResponse> {
   const url = `${BASE_URL}/api/cms/articles`
@@ -18,6 +19,18 @@ async function getAllArticle(): Promise<ArticleResponse> {
 async function getArticleById(id: string): Promise<Article | undefined> {
   const allArticles = await getAllArticle()
   return allArticles.data.articles.find((article) => article.id === id)
+}
+
+async function getOneArticle(): Promise<oneArticleData | undefined> {
+  const url = `${BASE_URL}/api/articles?limit=1`
+  const token = await getStorageItemAsync('accessToken')
+
+  if (!token) {
+    throw new Error('No access token found')
+  }
+
+  const response = await axios.get<oneArticleResponse>(url, { headers: getBearerHeader(token) })
+  return response.data.data[0]
 }
 
 async function createArticle(
@@ -76,4 +89,10 @@ async function editArticle(
   })
 }
 
-export const ArticleServices = { getAllArticle, createArticle, editArticle, getArticleById }
+export const ArticleServices = {
+  getAllArticle,
+  createArticle,
+  editArticle,
+  getArticleById,
+  getOneArticle
+}

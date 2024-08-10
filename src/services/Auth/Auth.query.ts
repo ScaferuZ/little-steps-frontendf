@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
 import * as FileSystem from 'expo-file-system'
-import { BASE_URL } from '../url'
 import { getBasicHeader, getBearerHeader } from 'src/utils/services'
 
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 function login(email: string, password: string): Promise<AxiosResponse<LoginResponse>> {
   const url = `${BASE_URL}/api/auth/login`
   const token = btoa(`${email}:${password}`)

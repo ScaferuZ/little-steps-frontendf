@@ -8,6 +8,13 @@ export function useAllArticles() {
   })
 }
 
+export function useOneArticle() {
+  return useQuery<oneArticleData | undefined, Error>({
+    queryKey: ['article'],
+    queryFn: ArticleServices.getOneArticle
+  })
+}
+
 export function useArticleById(id: string) {
   return useQuery({
     queryKey: ['article', id],

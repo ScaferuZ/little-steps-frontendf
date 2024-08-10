@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { BASE_URL } from '../url'
 import { getStorageItemAsync } from 'src/hooks/useStorageState'
+
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 
 interface NutriwiseAnalysisResponse {
   response: string
