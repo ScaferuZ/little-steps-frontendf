@@ -1,10 +1,16 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { ArticleServices } from './Articles.query'
 
 export function useAllArticles() {
-  return useQuery({
+  return useInfiniteQuery<ArticleResponse, Error>({
     queryKey: ['articles'],
-    queryFn: ArticleServices.getAllArticle
+    queryFn: ({ pageParam = 1 }) =>
+      ArticleServices.getAllArticle({ page: pageParam as number, limit: 10 }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.data.length < 10) return undefined // No more pages
+      return allPages.length + 1
+    }
   })
 }
 

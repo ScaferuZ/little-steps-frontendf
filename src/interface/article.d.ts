@@ -6,6 +6,7 @@ interface Article {
   videoUri: string | null
   type: bool
   category: string
+  createdAt: string
 }
 
 interface ArticleResponseData {
@@ -17,8 +18,7 @@ interface ArticleResponse {
   code: number
   status: string
   recordsTotal: number
-  message: string
-  data: ArticleResponseData
+  data: Article[]
   error: null | string
 }
 
@@ -72,4 +72,9 @@ interface oneArticleResponse {
   message: string
   data: oneArticleData
   error: null | string
+}
+
+interface ArticleParams {
+  page: number
+  limit: number
 }

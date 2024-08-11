@@ -1,30 +1,11 @@
-import { View, Text, Pressable, ScrollView, FlatList } from 'react-native'
+import { View, Text, Pressable, ScrollView, FlatList, ActivityIndicator } from 'react-native'
 import React from 'react'
 import NavWithSearch from 'src/components/NavWithSearch'
 import ScreenLayout from 'src/components/ScreenLayout'
 import ArtikelPreview from 'src/components/ArtikelPreview'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
-const data = [
-  {
-    title: 'Kenali Gejala dan Penyebab Penyakit Jantung Koroner',
-    date: 2,
-    description:
-      'Penyakit jantung koroner merupakan penyakit yang disebabkan oleh adanya penyumbatan pada pembuluh darah jantung. Penyakit ini dapat menyerang siapa saja, baik pria maupun wanita.'
-  },
-  {
-    title: 'Kenali Gejala dan Penyebab Penyakit Jantung Koroner',
-    date: 2,
-    description:
-      'Penyakit jantung koroner merupakan penyakit yang disebabkan oleh adanya penyumbatan pada pembuluh darah jantung. Penyakit ini dapat menyerang siapa saja, baik pria maupun wanita.'
-  },
-  {
-    title: 'Kenali Gejala dan Penyebab Penyakit Jantung Koroner',
-    date: 2,
-    description:
-      'Penyakit jantung koroner merupakan penyakit yang disebabkan oleh adanya penyumbatan pada pembuluh darah jantung. Penyakit ini dapat menyerang siapa saja,'
-  }
-]
+import { useAllArticles } from 'src/services/Articles/Articles.url'
+import { router } from 'expo-router'
 
 const StickyHeader = () => {
   return (
@@ -50,14 +31,37 @@ const ArtikelSeparator = () => {
 }
 
 const Artikel = () => {
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useAllArticles()
+
+  if (isLoading) return <ActivityIndicator size="large" color="#0000ff" />
+  if (error) return <Text>Error: {error.message}</Text>
+
+  const flattenedData = data?.pages.flatMap((page) => page.data) || []
+
+  const renderFooter = () => {
+    if (isFetchingNextPage) return <ActivityIndicator size="small" color="#0000ff" />
+    return null
+  }
+
+  const loadMore = () => {
+    if (hasNextPage) fetchNextPage()
+  }
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <StickyHeader />
       <FlatList
+        data={flattenedData}
+        renderItem={({ item }) => (
+          <ArtikelPreview onPress={() => router.push(`/parent-pro/artikel/${item.id}`)} {...item} />
+        )}
+        keyExtractor={(item) => item.id}
         ItemSeparatorComponent={ArtikelSeparator}
-        contentContainerStyle={{ paddingTop: 160 }} // Adjust this value based on your header height
-        data={data}
-        renderItem={({ item }) => <ArtikelPreview {...item} />}
+        contentContainerStyle={{ paddingTop: 160 }}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
       />
     </SafeAreaView>
   )

@@ -4,8 +4,14 @@ import { getStorageItemAsync } from 'src/hooks/useStorageState'
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 
-async function getAllArticle(): Promise<ArticleResponse> {
-  const url = `${BASE_URL}/api/cms/articles`
+const getAllArticle = async ({
+  page,
+  limit
+}: {
+  page: number
+  limit: number
+}): Promise<ArticleResponse> => {
+  const url = `${BASE_URL}/api/articles?page=${page}&limit=${limit}`
   const token = await getStorageItemAsync('accessToken')
 
   if (!token) {
@@ -16,13 +22,14 @@ async function getAllArticle(): Promise<ArticleResponse> {
   return response.data
 }
 
+// TODO: fix this function
 async function getArticleById(id: string): Promise<Article | undefined> {
-  const allArticles = await getAllArticle()
+  const allArticles = await getAllArticle({ page: 1, limit: 10 })
   return allArticles.data.articles.find((article) => article.id === id)
 }
 
 async function getOneArticle(): Promise<oneArticleData | undefined> {
-  const url = `${BASE_URL}/api/articles?limit=1`
+  const url = `${BASE_URL}/api/articles?limit=1&sort=desc`
   const token = await getStorageItemAsync('accessToken')
 
   if (!token) {

@@ -4,7 +4,7 @@ import ScreenLayout from 'src/components/ScreenLayout'
 import NavWithSearch from 'src/components/NavWithSearch'
 import ArtikelPreview from 'src/components/ArtikelPreview'
 import VideoPreview from 'src/components/VideoPreview'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { useOneArticle } from 'src/services/Articles/Articles.url'
 
 import { format, differenceInHours, parseISO } from 'date-fns'
@@ -29,6 +29,7 @@ const dataVideo = [
 ]
 
 const ParentProHeader = () => {
+  const router = useRouter()
   const { data: article, isLoading, error } = useOneArticle()
 
   if (isLoading) return <Text>Loading...</Text>
@@ -48,6 +49,21 @@ const ParentProHeader = () => {
   }
 
   const formattedDate = formatArticleDate(article.createdAt)
+  console.log(article.content)
+
+  function truncateText(text: string, maxLength: number): string {
+    if (text.length <= maxLength) return text
+
+    // Find the last space within the maxLength
+    const lastSpace = text.lastIndexOf(' ', maxLength)
+
+    // If no space found, just cut at maxLength
+    const truncateIndex = lastSpace > 0 ? lastSpace : maxLength
+
+    return text.substr(0, truncateIndex) + '...'
+  }
+
+  const truncatedContent = truncateText(article.content, 100) // Adjust 100 to your preferred length
 
   return (
     <View>
@@ -65,7 +81,12 @@ const ParentProHeader = () => {
         </View>
       </View>
       <View className="-mt-40">
-        <ArtikelPreview title={article.title} content={article.content} createdAt={formattedDate} />
+        <ArtikelPreview
+          onPress={() => router.push(`/parent-pro/artikel/${article.id}`)}
+          title={article.title}
+          content={truncatedContent}
+          createdAt={formattedDate}
+        />
         <View className="flex flex-row items-center justify-between mt-8 mx-6">
           <Text className="text-lg font-semibold text-darkBlue">Video Terbaru</Text>
           <Link asChild href="/parent-pro/video">
