@@ -133,7 +133,7 @@ const NutriwiseScreen: React.FC = () => {
     return (
       <View className="flex flex-1 justify-center mx-6">
         <Text className="text-center pb-3">
-          Tolng berikan permission jika ingin menggunakan kamera
+          Tolong berikan permission jika ingin menggunakan kamera
         </Text>
         <Button onPress={requestPermission}>Berikan Permission</Button>
       </View>
@@ -152,13 +152,13 @@ const NutriwiseScreen: React.FC = () => {
     }
   }
 
-  // Mock function to send photo to backend
   const sendPhotoToBackend = async () => {
     if (!capturedImage) return
 
     analyzeFood(capturedImage, {
       onSuccess: (data) => {
         try {
+          console.log(data.response)
           const parsedData = parseAnalysisResponse(data.response)
           console.log('Parsed Data:', JSON.stringify(parsedData, null, 2))
           router.push({
@@ -170,12 +170,33 @@ const NutriwiseScreen: React.FC = () => {
           })
         } catch (error) {
           console.error('Failed to parse analysis response:', error)
-          Alert.alert('Error', 'Failed to process the analysis results. Please try again.')
+          Alert.alert(
+            'Error',
+            'Failed to process the analysis results. Would you like to try again?',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Retake Photo', onPress: retakePicture }
+            ]
+          )
         }
       },
       onError: (error) => {
         console.error('Failed to analyze food:', error)
-        Alert.alert('Error', 'Failed to analyze the food. Please try again.')
+        if (error && typeof error === 'object' && 'response' in error && error.response) {
+          Alert.alert(
+            'Server Error',
+            'There was a problem on our end. Would you like to try again?',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Retake Photo', onPress: retakePicture }
+            ]
+          )
+        } else {
+          Alert.alert('Error', 'Failed to analyze the food. Would you like to try again?', [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Retake Photo', onPress: retakePicture }
+          ])
+        }
       }
     })
   }
@@ -183,44 +204,92 @@ const NutriwiseScreen: React.FC = () => {
   const parseAnalysisResponse = (response: string) => {
     const lines = response.split('\n').filter((line) => line.trim() !== '')
     let foodType = 'Unknown Food'
-    const healthBenefits: string[] = []
-    const macronutrients = {
-      protein: 0,
-      carbs: 0,
-      fat: 0
-    }
+    let quantity = 1
+    let nutritionalInfo: { [key: string]: number } = {}
+    let isTotal = false
 
-    let currentSection = ''
-
-    lines.forEach((line) => {
-      line = line.trim()
-      if (line.startsWith('The image shows')) {
-        foodType = line.replace('The image shows', '').replace('**', '').trim()
-      } else if (line.toLowerCase().includes('health benefits:')) {
-        currentSection = 'health'
-      } else if (line.toLowerCase().includes('macronutrients')) {
-        currentSection = 'macro'
-      } else if (currentSection === 'health' && line.startsWith('*')) {
-        const benefit = line.replace('*', '').replace('**', '').trim()
-        healthBenefits.push(benefit)
-      } else if (currentSection === 'macro' && line.includes(':')) {
-        const [nutrient, value] = line.split(':')
-        if (nutrient && value) {
-          const numMatch = value.match(/\d+(\.\d+)?/)
-          if (numMatch) {
-            const numValue = parseFloat(numMatch[0])
-            if (!isNaN(numValue)) {
-              if (nutrient.toLowerCase().includes('protein')) macronutrients.protein = numValue
-              else if (nutrient.toLowerCase().includes('carb')) macronutrients.carbs = numValue
-              else if (nutrient.toLowerCase().includes('fat')) macronutrients.fat = numValue
+    try {
+      // Extract food type and quantity
+      for (const line of lines) {
+        if (line.toLowerCase().includes('ingredient')) {
+          const ingredientLines = lines.slice(lines.indexOf(line) + 1)
+          for (const ingredientLine of ingredientLines) {
+            if (ingredientLine.trim().startsWith('-')) {
+              const match = ingredientLine.match(/- ([\w\s]+)\s*\((\d+)\)/)
+              if (match) {
+                foodType = match[1].trim()
+                quantity = parseInt(match[2], 10)
+                break
+              }
+            } else {
+              break // Stop if we hit a non-ingredient line
             }
           }
+          break // Stop after processing ingredients
         }
       }
-    })
 
-    return { foodType, healthBenefits, macronutrients }
+      // Parse nutritional information
+      lines.forEach((line) => {
+        if (
+          line.toLowerCase().includes('total') ||
+          line.toLowerCase().includes('approximate nutritional value')
+        ) {
+          isTotal = true
+        }
+
+        const nutritionMatch = line.match(/([\w\s]+):\s*([\d.-]+)(?:\s*-\s*([\d.-]+))?\s*(\w+)?/)
+        if (nutritionMatch) {
+          let [, nutrient, value, upperValue, unit] = nutritionMatch
+          nutrient = nutrient.trim().toLowerCase()
+          let numericValue = parseFloat(value)
+
+          // Handle range values by taking the average
+          if (upperValue) {
+            numericValue = (numericValue + parseFloat(upperValue)) / 2
+          }
+
+          // Standardize units
+          if (unit === 'kcal') nutrient = 'calories'
+          if (unit === 'mg' && nutrient !== 'potassium') numericValue /= 1000 // convert to grams except for potassium
+
+          nutritionalInfo[nutrient] = numericValue
+        }
+      })
+
+      // If we only have per-item values, multiply by quantity
+      if (!isTotal) {
+        Object.keys(nutritionalInfo).forEach((key) => {
+          nutritionalInfo[key] *= quantity
+        })
+      }
+
+      return { foodType, quantity, nutritionalInfo }
+    } catch (error) {
+      console.error('Error parsing analysis response:', error)
+      return {
+        foodType: 'Unknown Food',
+        quantity: 1,
+        nutritionalInfo: {}
+      }
+    }
   }
+
+  const response = `
+Ingredients: 
+- Bananas (5)
+
+Approximate nutritional value (per banana):
+- Calories: 105
+- Carbohydrates: 27g
+- Sugars: 14g
+- Dietary Fiber: 3g
+- Protein: 1g
+- Fat: 0.3g
+- Potassium: 422mg
+`
+  const result = parseAnalysisResponse(response)
+  console.log('result MockUP', result)
 
   const retakePicture = () => {
     setCapturedImage(null)

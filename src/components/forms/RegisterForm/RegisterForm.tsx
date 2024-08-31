@@ -5,7 +5,15 @@ import Input from 'src/components/Input'
 import EyePassword from 'src/components/elements/EyePassword'
 import { useState } from 'react'
 import { useSignup } from 'src/services/Auth/Auth.url'
-import { View, Text, Alert, ActivityIndicator } from 'react-native'
+import {
+  View,
+  Text,
+  Alert,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView
+} from 'react-native'
 import Button from 'src/components/Button'
 import LinkButton from 'src/components/LinkButton'
 import AvatarUploadArea from 'src/components/elements/AvatarUploadArea'
@@ -74,7 +82,9 @@ const RegisterForm = () => {
   }
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}>
       <View className="h-2" />
       {/* <Controller */}
       {/*   control={control} */}
@@ -191,7 +201,7 @@ const RegisterForm = () => {
           />
         </View>
       </View>
-    </>
+    </KeyboardAvoidingView>
   )
 }
 

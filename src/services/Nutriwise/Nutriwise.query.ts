@@ -15,10 +15,6 @@ const analyzeFood = async (imageUri: string): Promise<NutriwiseAnalysisResponse>
     type: 'image/jpeg',
     name: 'food_image.jpg'
   } as any)
-  formData.append(
-    'message',
-    'Analyze this food image. Determine the type of food/snack/water, list its health benefits, and provide its macronutrients (protein, carbs, fat).'
-  )
 
   const response = await axios.post(`${BASE_URL}/api/ai`, formData, {
     headers: {
