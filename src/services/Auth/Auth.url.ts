@@ -1,6 +1,7 @@
 import { AuthServices } from './Auth.query'
 import { UseMutationOptions } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
+import { useSession } from 'app/ctx'
 
 // Define the useAdminLogin hook
 export function useLogin(options?: UseMutationOptions<LoginResponse, unknown, LoginForm>) {
@@ -39,5 +40,26 @@ export function useSignup(options?: UseMutationOptions<SignupResponse, unknown, 
       return response.data
     },
     ...options
+  })
+}
+
+export function useRefreshToken(options?: UseMutationOptions<RefreshTokenResponse, unknown, void>) {
+  const { refreshToken, updateAccessToken } = useSession()
+
+  return useMutation<RefreshTokenResponse, unknown, void>({
+    mutationFn: async () => {
+      if (!refreshToken) throw new Error('No refresh token available')
+      const response = await AuthServices.refreshToken(refreshToken)
+      return response.data
+    },
+    onSuccess: (data) => {
+      if (data.status === 'success' && data.data.access) {
+        updateAccessToken(data.data.access)
+        options?.onSuccess?.(data, undefined, undefined)
+      } else {
+        throw new Error('Failed to refresh token')
+      }
+    },
+    onError: options?.onError
   })
 }

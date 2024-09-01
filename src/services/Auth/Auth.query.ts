@@ -47,8 +47,14 @@ function logout() {
   else console.error('No refresh token found')
 }
 
+async function refreshToken(refreshToken: string): Promise<AxiosResponse<RefreshTokenResponse>> {
+  const url = `${BASE_URL}/api/auth/refresh`
+  return axios.post(url, { refresh: refreshToken }, { headers: getBearerHeader(refreshToken) })
+}
+
 export const AuthServices = {
   login,
   signup,
-  logout
+  logout,
+  refreshToken
 }

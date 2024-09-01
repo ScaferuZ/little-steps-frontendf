@@ -54,7 +54,7 @@ const FoodAnalysisScreen = () => {
         onPress={() => router.back()}
         className="mb-4 flex flex-row justify-between">
         <Ionicons name="arrow-back" size={24} color="black" />
-        <Text className="text-2xl font-bold mb-4">{data.foodType}</Text>
+        <Text className="text-2xl font-bold mb-4">{data.foodType} </Text>
         <Octicons name="bookmark" size={24} color="black" />
       </TouchableOpacity>
 
@@ -68,6 +68,7 @@ const FoodAnalysisScreen = () => {
           <Text className="text-3xl text-[#2C3968] font-bold">
             {data.nutritionalInfo.calories} kcal
           </Text>
+          <Text className="text-sm">(for {data.quantity} pcs)</Text>
         </View>
       )}
 
@@ -95,7 +96,14 @@ const FoodAnalysisScreen = () => {
         />
       </View>
 
-      <Text className="text-3xl text-[#2C3968] font-bold">✨ Nutrition Facts</Text>
+      <Text className="text-3xl text-[#2C3968] font-bold ">✨ Health Benefits</Text>
+      {data.healthBenefits.map((benefit, index) => (
+        <Text key={index} className="mt-2">
+          • {benefit}
+        </Text>
+      ))}
+
+      <Text className="text-3xl text-[#2C3968] font-bold mt-6">✨ Nutrition Facts</Text>
 
       <View className="flex flex-row justify-between items-center mt-4">
         <View className="p-1.5 rounded-full bg-primary">
@@ -185,7 +193,7 @@ const FoodAnalysisScreen = () => {
         </Text>
         <Text className="font-semibold text-accent">0%</Text>
       </View>
-      <View className="flex flex-row justify-between items-center mt-4">
+      <View className="flex flex-row justify-between items-center mt-4 mb-16">
         <View className="p-1.5 rounded-full bg-primary">
           <FontAwesome6 name="bolt" size={10} color="white" />
         </View>

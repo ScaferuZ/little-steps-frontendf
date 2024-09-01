@@ -45,3 +45,12 @@ interface SignupResponse {
   data: SignupResponseData
   error: null | string
 }
+
+interface RefreshTokenResponse {
+  code: number
+  status: string
+  recordsTotal: number
+  message: string
+  data: { access: string }
+  error: null | string
+}

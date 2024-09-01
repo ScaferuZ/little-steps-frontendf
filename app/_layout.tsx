@@ -5,10 +5,11 @@ import { StatusBar } from 'expo-status-bar'
 import * as SplashScreen from 'expo-splash-screen'
 import styled, { ThemeProvider, type DefaultTheme } from 'styled-components/native'
 import { appTheme, navTheme } from 'src/config/theme'
-import { SessionProvider } from './ctx'
+import { SessionProvider, useSession } from './ctx'
 import { RootSiblingParent } from 'react-native-root-siblings'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
+import { setupAxiosInterceptors } from 'src/utils/axiosSetup'
 
 import './global.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -18,7 +19,6 @@ const queryClient = new QueryClient()
 export { ErrorBoundary } from 'expo-router'
 
 export const unstable_settings = {
-  // Ensure that reloading on any route keeps a back button present
   initialRouteName: 'login'
 }
 
@@ -44,6 +44,16 @@ export default function AppLayout() {
   return <RootAppLayout />
 }
 
+function AxiosInterceptorSetup({ children }: { children: React.ReactNode }) {
+  const { refreshAccessToken, signOut, accessToken } = useSession()
+
+  useEffect(() => {
+    setupAxiosInterceptors(refreshAccessToken, signOut, () => accessToken)
+  }, [refreshAccessToken, signOut, accessToken])
+
+  return <>{children}</>
+}
+
 function RootAppLayout() {
   return (
     <RootSiblingParent>
@@ -52,9 +62,11 @@ function RootAppLayout() {
           <StatusBar style="dark" />
           <S.AppWrapper>
             <SessionProvider>
-              <NavProvider value={navTheme}>
-                <Slot screenOptions={{ headerShown: false }} />
-              </NavProvider>
+              <AxiosInterceptorSetup>
+                <NavProvider value={navTheme}>
+                  <Slot screenOptions={{ headerShown: false }} />
+                </NavProvider>
+              </AxiosInterceptorSetup>
             </SessionProvider>
           </S.AppWrapper>
         </QueryClientProvider>

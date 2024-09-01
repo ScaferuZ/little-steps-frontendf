@@ -17,9 +17,25 @@ import { Card, CardBody, CardTitle, CardActions } from 'src/components/shared/Ca
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { CameraView, CameraType, useCameraPermissions, Camera } from 'expo-camera'
-import Button from 'src/components/Button'
+import * as ImagePicker from 'expo-image-picker'
 import { useRouter } from 'expo-router'
 import { useNutriwiseAnalysis } from 'src/services/Nutriwise/Nutriwise.url'
+import Button from 'src/components/Button'
+
+interface AnalysisData {
+  foodType: string
+  quantity: number
+  healthBenefits: string[]
+  nutritionalInfo: {
+    calories: number
+    protein: number
+    carbohydrates: number
+    sugars: number
+    dietaryFiber: number
+    fat: number
+    potassium: number
+  }
+}
 
 interface NutritionCardData {
   title: string
@@ -125,6 +141,19 @@ const NutriwiseScreen: React.FC = () => {
     setCapturedImage(null)
   }
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    })
+
+    if (!result.canceled) {
+      setCapturedImage(result.assets[0].uri)
+    }
+  }
+
   if (!permission) {
     return <View />
   }
@@ -201,76 +230,75 @@ const NutriwiseScreen: React.FC = () => {
     })
   }
 
-  const parseAnalysisResponse = (response: string) => {
+  const parseAnalysisResponse = (response: string): AnalysisData => {
     const lines = response.split('\n').filter((line) => line.trim() !== '')
     let foodType = 'Unknown Food'
     let quantity = 1
+    let healthBenefits: string[] = []
     let nutritionalInfo: { [key: string]: number } = {}
-    let isTotal = false
 
     try {
       // Extract food type and quantity
-      for (const line of lines) {
-        if (line.toLowerCase().includes('ingredient')) {
-          const ingredientLines = lines.slice(lines.indexOf(line) + 1)
-          for (const ingredientLine of ingredientLines) {
-            if (ingredientLine.trim().startsWith('-')) {
-              const match = ingredientLine.match(/- ([\w\s]+)\s*\((\d+)\)/)
-              if (match) {
-                foodType = match[1].trim()
-                quantity = parseInt(match[2], 10)
-                break
-              }
-            } else {
-              break // Stop if we hit a non-ingredient line
-            }
+      const ingredientMatch = lines[0].match(/Visible ingredients: (.*) \((\d+)\)/)
+      if (ingredientMatch) {
+        foodType = ingredientMatch[1].trim()
+        quantity = parseInt(ingredientMatch[2], 10)
+      }
+
+      // Extract health benefits
+      const healthBenefitsIndex = lines.findIndex((line) => line.includes('Health Benefits:'))
+      if (healthBenefitsIndex !== -1) {
+        for (let i = healthBenefitsIndex + 1; i < lines.length; i++) {
+          if (lines[i].startsWith('-')) {
+            healthBenefits.push(lines[i].substring(1).trim())
+          } else {
+            break
           }
-          break // Stop after processing ingredients
         }
       }
 
       // Parse nutritional information
-      lines.forEach((line) => {
-        if (
-          line.toLowerCase().includes('total') ||
-          line.toLowerCase().includes('approximate nutritional value')
-        ) {
-          isTotal = true
-        }
+      const nutritionStartIndex = lines.findIndex((line) =>
+        line.includes('Total approximate nutritional value')
+      )
+      if (nutritionStartIndex !== -1) {
+        for (let i = nutritionStartIndex + 1; i < lines.length; i++) {
+          const nutritionMatch = lines[i].match(/- ([\w\s]+):\s*([\d.]+)\s*(\w+)/)
+          if (nutritionMatch) {
+            let [, nutrient, value, unit] = nutritionMatch
+            nutrient = nutrient.trim().toLowerCase()
+            let numericValue = parseFloat(value)
 
-        const nutritionMatch = line.match(/([\w\s]+):\s*([\d.-]+)(?:\s*-\s*([\d.-]+))?\s*(\w+)?/)
-        if (nutritionMatch) {
-          let [, nutrient, value, upperValue, unit] = nutritionMatch
-          nutrient = nutrient.trim().toLowerCase()
-          let numericValue = parseFloat(value)
+            // Standardize units
+            if (unit === 'kcal') nutrient = 'calories'
+            if (unit === 'mg' && nutrient !== 'potassium') numericValue /= 1000 // convert to grams except for potassium
 
-          // Handle range values by taking the average
-          if (upperValue) {
-            numericValue = (numericValue + parseFloat(upperValue)) / 2
+            nutritionalInfo[nutrient] = numericValue
           }
-
-          // Standardize units
-          if (unit === 'kcal') nutrient = 'calories'
-          if (unit === 'mg' && nutrient !== 'potassium') numericValue /= 1000 // convert to grams except for potassium
-
-          nutritionalInfo[nutrient] = numericValue
         }
-      })
-
-      // If we only have per-item values, multiply by quantity
-      if (!isTotal) {
-        Object.keys(nutritionalInfo).forEach((key) => {
-          nutritionalInfo[key] *= quantity
-        })
       }
 
-      return { foodType, quantity, nutritionalInfo }
+      return {
+        foodType,
+        quantity,
+        healthBenefits,
+        nutritionalInfo: nutritionalInfo as AnalysisData['nutritionalInfo']
+      }
     } catch (error) {
       console.error('Error parsing analysis response:', error)
       return {
         foodType: 'Unknown Food',
         quantity: 1,
-        nutritionalInfo: {}
+        healthBenefits: [],
+        nutritionalInfo: {
+          calories: 0,
+          protein: 0,
+          carbohydrates: 0,
+          sugars: 0,
+          dietaryFiber: 0,
+          fat: 0,
+          potassium: 0
+        }
       }
     }
   }
@@ -322,11 +350,16 @@ Approximate nutritional value (per banana):
                   onPress={closeCamera}>
                   <Ionicons name="close" size={24} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  className="p-4 bg-darkPink/50 rounded-full"
-                  onPress={toggleCameraFacing}>
-                  <Ionicons name="camera-reverse" size={24} color="white" />
-                </TouchableOpacity>
+                <View className="flex-row">
+                  <TouchableOpacity
+                    className="p-4 bg-darkPink/50 rounded-full mr-2"
+                    onPress={toggleCameraFacing}>
+                    <Ionicons name="camera-reverse" size={24} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity className="p-4 bg-darkPink/50 rounded-full" onPress={pickImage}>
+                    <Ionicons name="images" size={24} color="white" />
+                  </TouchableOpacity>
+                </View>
               </View>
               <View className="h-80" />
               <View className="h-80" />

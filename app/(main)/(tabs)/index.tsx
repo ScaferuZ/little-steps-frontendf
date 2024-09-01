@@ -95,6 +95,7 @@ export default function Beranda() {
               label="Konsultasi"
             />
           </View>
+          <Text className="text-2xl font-bold text-black mt-6">Early Access</Text>
           {/* Artikel */}
           <View className="flex flex-row w-full justify-between items-center mb-6">
             <Text className="text-lg font-bold text-black mt-6">WiseGuard Terbaru</Text>
