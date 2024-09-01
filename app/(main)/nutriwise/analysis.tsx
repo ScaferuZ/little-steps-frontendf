@@ -221,21 +221,35 @@ const FoodAnalysisScreen = () => {
 
           try {
             const existingData = await getStorageItemAsync('savedFood')
-            let updatedData = macronutrients
+            let updatedData = {
+              calories: Math.round(macronutrients.calories || 0),
+              protein: Math.round(macronutrients.protein || 0),
+              carbohydrates: Math.round(macronutrients.carbohydrates || 0),
+              fat: Math.round(macronutrients.fat || 0)
+            }
 
             if (existingData) {
               const parsedExistingData = JSON.parse(existingData)
               updatedData = {
-                calories: (parsedExistingData.calories || 0) + (macronutrients.calories || 0),
-                protein: (parsedExistingData.protein || 0) + (macronutrients.protein || 0),
-                carbohydrates:
-                  (parsedExistingData.carbohydrates || 0) + (macronutrients.carbohydrates || 0),
-                fat: (parsedExistingData.fat || 0) + (macronutrients.fat || 0)
+                calories: Math.round(
+                  (parsedExistingData.calories || 0) + (macronutrients.calories || 0)
+                ),
+                protein: Math.round(
+                  (parsedExistingData.protein || 0) + (macronutrients.protein || 0)
+                ),
+                carbohydrates: Math.round(
+                  (parsedExistingData.carbohydrates || 0) + (macronutrients.carbohydrates || 0)
+                ),
+                fat: Math.round((parsedExistingData.fat || 0) + (macronutrients.fat || 0))
               }
             }
 
             await setStorageItemAsync('savedFood', JSON.stringify(updatedData))
             Alert.alert('Success', 'Food information updated successfully!')
+
+            setTimeout(() => {
+              router.push('/')
+            }, 2000)
           } catch (error) {
             console.error('Error updating food information:', error)
             Alert.alert('Error', 'Failed to update food information. Please try again.')

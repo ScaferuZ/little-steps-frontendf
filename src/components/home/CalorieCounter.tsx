@@ -2,7 +2,11 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import Svg, { Circle, G } from 'react-native-svg'
 
-const CalorieCounter = () => {
+interface CalorieCounterProps {
+  calories: number
+}
+
+const CalorieCounter: React.FC<CalorieCounterProps> = ({ calories }) => {
   const size = 160
   const strokeWidth = 10
   const radius = (size - strokeWidth) / 2
@@ -41,7 +45,7 @@ const CalorieCounter = () => {
           </G>
         </Svg>
         <View className="absolute items-center justify-center">
-          <Text className="text-4xl font-bold text-accent">0</Text>
+          <Text className="text-4xl font-bold text-accent">{calories}</Text>
           <Text className="text-lg font-light text-gray-500">Calories</Text>
         </View>
       </View>
