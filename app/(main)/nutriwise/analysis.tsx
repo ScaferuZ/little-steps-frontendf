@@ -5,10 +5,12 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import Octicons from '@expo/vector-icons/Octicons'
 import NutrientDetailCard from 'src/components/home/NutrientDetail'
 import { FontAwesome6 } from '@expo/vector-icons'
+import { getStorageItemAsync, setStorageItemAsync } from 'src/hooks/useStorageState'
 
 interface AnalysisData {
-  foodType: string
-  quantity: number
+  foodTypes: string[]
+  quantities: number[]
+  healthBenefits: string[]
   nutritionalInfo: {
     calories: number
     protein: number
@@ -54,7 +56,7 @@ const FoodAnalysisScreen = () => {
         onPress={() => router.back()}
         className="mb-4 flex flex-row justify-between">
         <Ionicons name="arrow-back" size={24} color="black" />
-        <Text className="text-2xl font-bold mb-4">{data.foodType} </Text>
+        <Text className="text-2xl font-bold mb-4">{data.foodTypes.join(', ')} </Text>
         <Octicons name="bookmark" size={24} color="black" />
       </TouchableOpacity>
 
@@ -68,7 +70,10 @@ const FoodAnalysisScreen = () => {
           <Text className="text-3xl text-[#2C3968] font-bold">
             {data.nutritionalInfo.calories} kcal
           </Text>
-          <Text className="text-sm">(for {data.quantity} pcs)</Text>
+          <Text className="text-sm">
+            (for {data.quantities.reduce((a, b) => a + b, 0)}{' '}
+            {data.quantities.length > 1 ? 'pieces' : 'piece'})
+          </Text>
         </View>
       )}
 
@@ -205,6 +210,40 @@ const FoodAnalysisScreen = () => {
         </Text>
         <Text className="font-semibold text-accent">0%</Text>
       </View>
+      <TouchableOpacity
+        onPress={async () => {
+          const macronutrients = {
+            calories: data?.nutritionalInfo.calories,
+            protein: data?.nutritionalInfo.protein,
+            carbohydrates: data?.nutritionalInfo.carbohydrates,
+            fat: data?.nutritionalInfo.fat
+          }
+
+          try {
+            const existingData = await getStorageItemAsync('savedFood')
+            let updatedData = macronutrients
+
+            if (existingData) {
+              const parsedExistingData = JSON.parse(existingData)
+              updatedData = {
+                calories: (parsedExistingData.calories || 0) + (macronutrients.calories || 0),
+                protein: (parsedExistingData.protein || 0) + (macronutrients.protein || 0),
+                carbohydrates:
+                  (parsedExistingData.carbohydrates || 0) + (macronutrients.carbohydrates || 0),
+                fat: (parsedExistingData.fat || 0) + (macronutrients.fat || 0)
+              }
+            }
+
+            await setStorageItemAsync('savedFood', JSON.stringify(updatedData))
+            Alert.alert('Success', 'Food information updated successfully!')
+          } catch (error) {
+            console.error('Error updating food information:', error)
+            Alert.alert('Error', 'Failed to update food information. Please try again.')
+          }
+        }}
+        className="bg-primary py-3 px-6 rounded-full mb-8">
+        <Text className="text-white text-center font-bold">Update saved food</Text>
+      </TouchableOpacity>
     </ScrollView>
   )
 }

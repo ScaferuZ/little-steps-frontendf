@@ -23,8 +23,8 @@ import { useNutriwiseAnalysis } from 'src/services/Nutriwise/Nutriwise.url'
 import Button from 'src/components/Button'
 
 interface AnalysisData {
-  foodType: string
-  quantity: number
+  foodTypes: string[]
+  quantities: number[]
   healthBenefits: string[]
   nutritionalInfo: {
     calories: number
@@ -232,17 +232,26 @@ const NutriwiseScreen: React.FC = () => {
 
   const parseAnalysisResponse = (response: string): AnalysisData => {
     const lines = response.split('\n').filter((line) => line.trim() !== '')
-    let foodType = 'Unknown Food'
-    let quantity = 1
+    let foodTypes: string[] = []
+    let quantities: number[] = []
     let healthBenefits: string[] = []
     let nutritionalInfo: { [key: string]: number } = {}
 
     try {
-      // Extract food type and quantity
-      const ingredientMatch = lines[0].match(/Visible ingredients: (.*) \((\d+)\)/)
-      if (ingredientMatch) {
-        foodType = ingredientMatch[1].trim()
-        quantity = parseInt(ingredientMatch[2], 10)
+      // Extract food types and quantities
+      const ingredientLine = lines.find((line) => line.startsWith('Visible ingredients:'))
+      if (ingredientLine) {
+        const ingredients = ingredientLine.substring('Visible ingredients:'.length).split(',')
+        ingredients.forEach((ingredient) => {
+          const match = ingredient.trim().match(/(.*?)\s*\((\d+).*?\)/)
+          if (match) {
+            foodTypes.push(match[1].trim())
+            quantities.push(parseInt(match[2], 10))
+          } else {
+            foodTypes.push(ingredient.trim())
+            quantities.push(1) // Default quantity if not specified
+          }
+        })
       }
 
       // Extract health benefits
@@ -279,16 +288,16 @@ const NutriwiseScreen: React.FC = () => {
       }
 
       return {
-        foodType,
-        quantity,
+        foodTypes,
+        quantities,
         healthBenefits,
         nutritionalInfo: nutritionalInfo as AnalysisData['nutritionalInfo']
       }
     } catch (error) {
       console.error('Error parsing analysis response:', error)
       return {
-        foodType: 'Unknown Food',
-        quantity: 1,
+        foodTypes: ['Unknown Food'],
+        quantities: [1],
         healthBenefits: [],
         nutritionalInfo: {
           calories: 0,
